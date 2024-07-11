@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run qmake",
+            "type": "shell",
+            "command": "qmake",
+            "args": [
+                "${workspaceFolder}/PAO.pro"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Make",
+            "type": "shell",
+            "command": "mingw32-make",
+            "group": "build",
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^.+:(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: g++.exe build active file",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/*.cpp", // This only matches files in the root, not subdirectories
+                "-o",
+                "${workspaceFolder}/project.exe"
+            ],
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "chcp 65001>nul && for /r %f in (*.cpp) do g++.exe -fdiagnostics-color=always -g %f -o ${workspaceFolder}\\project.exe"
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

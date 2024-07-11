@@ -1,0 +1,44 @@
+
+#include "Dust25S.h"
+#include <math.h>
+namespace Sensor{
+
+float Dust25S::trasmute(float rawMeasure) const  {
+    float concentrationPM25 = a * rawMeasure + b;
+    return concentrationPM25;
+};
+Dust25S::~Dust25S(){};
+Dust25S::Dust25S(): AbstractSensor("", "Resistore a impasto di carbone", "", "", "", "PM 2.5 [µg/m³]" ,0, 0, 0, 0 ) ,a(0), b(0){};
+Dust25S::Dust25S(   const std::string name, 
+                const  std::string shortDesc,
+                const  std::string longDesc,
+                const  std::string xAxisLabel,
+                const  unsigned int simulationSpan,
+                const  float sensibility,
+                const  float maxMeasurable,
+                const  float minMeasurable,
+                const float a,
+                const float b) 
+                : AbstractSensor(name, "Resistore a impasto di carbone", shortDesc, longDesc, xAxisLabel, "PM 2.5 [µg/m³]" ,simulationSpan, sensibility, maxMeasurable, minMeasurable ),
+                a(a), b(b){};
+
+void Dust25S::accept(VisitorInterface& visitor){
+    visitor.visitDust25S(*this);
+};
+
+// getter
+float Dust25S::getA() const {return a;};
+float Dust25S::getB() const {return b;};
+
+// setter
+void Dust25S::setA( float A){ 
+    a=A ;
+notifyAllObservers(this);
+}; 
+void Dust25S::setB( float B){ 
+    b=B ;
+notifyAllObservers(this);
+}; 
+
+
+}
