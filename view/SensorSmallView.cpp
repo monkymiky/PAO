@@ -4,7 +4,7 @@
 #include <QString>
 #include "../sensor/ObserverInterface.h"
 #include <QMouseEvent>
-
+#include <iostream>
 namespace Sensor {
 namespace View {
 
@@ -19,20 +19,20 @@ SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainSensorView& main, Q
     layout->addWidget(sensor_type_label);
     layout->addWidget(short_description_label);
     
-    connect(this, SIGNAL(clicked()), &main, SLOT(update(sensor)));
+    connect(this, &Sensor::View::SmallSensorView::clickedWithSensor, &main, &Sensor::View::MainSensorView::update);    
     sensor.addObserver(this);
 }
 
 void SmallSensorView::show() {
     name_label->setText(QString::fromStdString(sensor.getName()));
-    sensor_type_label->setText("Type: " + QString::fromStdString(sensor.getSensorType()));
+    sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor.getSensorType()));
     short_description_label->setText(QString::fromStdString(sensor.getShortDescription()));
 }
 
 void SmallSensorView::update(AbstractSensor* sensor) {
     if(sensor != nullptr){
         name_label->setText(QString::fromStdString(sensor->getName()));
-        sensor_type_label->setText("Type: " + QString::fromStdString(sensor->getSensorType()));
+        sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor->getSensorType()));
         short_description_label->setText(QString::fromStdString(sensor->getShortDescription()));
     }else{
         delete this;
@@ -47,7 +47,8 @@ const AbstractSensor* SmallSensorView::getSensor() const
 void SmallSensorView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit clicked();
+        emit clickedWithSensor(&sensor);
+        std::cout << "clicked emitted" << std::endl;
     }
     QFrame::mousePressEvent(event);
 }

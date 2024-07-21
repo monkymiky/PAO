@@ -127,13 +127,13 @@ const std::string& AbstractSensor::getLongDescription() const {return longDescri
 const std::string& AbstractSensor::getXAxisLabel() const {return xAxisLabel;}
 const std::string& AbstractSensor::getYAxisLabel() const{return yAxisLabel;};
 unsigned int AbstractSensor::getSimulationSpan() const {return simulationSpan;}
-float AbstractSensor::getMaxMeasurable() const {return simulationSpan;}
-float AbstractSensor::getMinMeasurable() const {return simulationSpan;}
-float AbstractSensor::getMax() const {return simulationSpan;}
-float AbstractSensor::getMin() const {return simulationSpan;}
-float AbstractSensor::getAverage() const {return simulationSpan;}
-float AbstractSensor::getVariance() const {return simulationSpan;}
-float AbstractSensor::getSensibility() const {return simulationSpan;}
+float AbstractSensor::getMaxMeasurable() const {return maxMeasurable;}
+float AbstractSensor::getMinMeasurable() const {return minMeasurable;}
+float AbstractSensor::getMax() const {return max;}
+float AbstractSensor::getMin() const {return min;}
+float AbstractSensor::getAverage() const {return average;}
+float AbstractSensor::getVariance() const {return variance;}
+float AbstractSensor::getSensibility() const {return sensibility;}
 const std::vector<std::array<float, 2>>& AbstractSensor::getMeasure() const{return measure;};
 
 // setter --------------------------------

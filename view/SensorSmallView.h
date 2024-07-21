@@ -26,8 +26,10 @@ class SmallSensorView: public QFrame, public ObserverInterface {
     void show();
     void update(AbstractSensor* sensor) override;
     const AbstractSensor* getSensor() const;
+
   signals:
-    void clicked();
+    void clickedWithSensor(AbstractSensor* sensor);
+    
 };
 
 }

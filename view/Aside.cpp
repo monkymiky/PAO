@@ -81,7 +81,17 @@ void Aside::update(AbstractSensor* sensor) {
         }
     }
     else{
-        std::cerr << "Error in Aside::update(AbstractSensor* sensor)" << std::endl;
+        for (auto sensorSView : sensorSViewList){
+            delete sensorSView;
+        }
+        sensorSViewList.clear();
+        for(auto sensor : manager.getSensors()){
+            SmallSensorView* sensorSmallV = new SmallSensorView(*sensor, main, sensorScrollFrame);
+            sensorSViewList.push_back(sensorSmallV);
+            sensorSmallV->show();
+            SensorListLayout->addWidget(sensorSmallV);
+            sensor->addObserver(sensorSmallV);
+        }
     }
 };
     
