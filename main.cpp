@@ -11,8 +11,8 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     Sensor::SensorManager  manager =  Sensor::SensorManager();
-    Sensor::View::MainSensorView * main = new Sensor::View::MainSensorView();
-    Sensor::View::Aside*  aside = new Sensor::View::Aside(manager, main);
+    Sensor::View::MainSensorView  main =  Sensor::View::MainSensorView();
+    Sensor::View::Aside  aside =  Sensor::View::Aside(manager, main);
     // debug
     std::string prova = "prova";
     const float a = 10;
@@ -22,13 +22,9 @@ int main(int argc, char *argv[]) {
     Sensor::Dust25S* dustSensor = new Sensor::Dust25S(prova,prova,prova,prova,d,a,b,c);
     manager.addSensor(dustSensor);
     // fine debug
-
-    //debug
-    std::cerr <<" debug :  "<<std::endl;
-    //fine debug
-    Sensor::View::MainWindow* mainW = new Sensor::View::MainWindow(*aside,*main);
-    mainW->show();
-    mainW->resize(1024, 512);
+    Sensor::View::MainWindow mainW =  Sensor::View::MainWindow(aside,main, manager);
+    mainW.show();
+    mainW.resize(1024, 512);
 
 
     return app.exec();

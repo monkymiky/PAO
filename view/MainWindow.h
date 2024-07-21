@@ -15,9 +15,10 @@ class MainWindow : public QMainWindow {
     private:
     Aside& aside;
     MainSensorView& main;
+    SensorManager& manager;
     public:
     ~MainWindow() override;
-    MainWindow(Aside& aside,MainSensorView& main, QWidget *parent = nullptr);
+    MainWindow(Aside& aside,MainSensorView& main,SensorManager& manager, QWidget *parent = nullptr);
     private slots:
     void changeMain(AbstractSensor* sensor);
 };

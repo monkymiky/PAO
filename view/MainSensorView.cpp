@@ -76,13 +76,19 @@ MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr
     longDesc->setWordWrap(true);
 
     MainSensorViewLayout->addWidget(ScrollArea);
+}
+MainSensorView::~MainSensorView() {
+    delete(chart);
+    delete(chartView);
+    delete(series);
 };
- MainSensorView::MainSensorView(AbstractSensor* sensor, QWidget* parent)
- : QWidget(parent), sensor(sensor){
+MainSensorView::MainSensorView(AbstractSensor *sensor, QWidget *parent)
+    : QWidget(parent), sensor(sensor)
+{
     QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
     MainSensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     
-    QFrame* titleFrame = new QFrame();
+    QFrame* titleFrame = new QFrame(this);
     QHBoxLayout* titleFrameLayout = new QHBoxLayout(titleFrame);
     titleFrame->setLayout(titleFrameLayout);
 
@@ -102,7 +108,7 @@ MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr
 
     MainSensorViewLayout->addWidget(titleFrame);
 
-    QFrame* infoFrame = new QFrame();
+    QFrame* infoFrame = new QFrame(this);
     QGridLayout* infoFrameLayout = new QGridLayout(infoFrame);
     infoFrame->setLayout(infoFrameLayout);
 
@@ -200,6 +206,8 @@ void MainSensorView::deleteSensor(){
     variance->setText("");
     longDesc->setText("deleted sensor");
     delete(chart);
+    delete(chartView);
+    delete(series);
 };
 
 void MainSensorView::simulate(){

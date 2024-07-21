@@ -22,9 +22,10 @@ class SmallSensorView: public QFrame, public ObserverInterface {
     void mousePressEvent(QMouseEvent *event) override;
 
   public:
-    SmallSensorView(AbstractSensor& sensor, MainSensorView* main, QWidget* parent = nullptr);
+    SmallSensorView(AbstractSensor& sensor, MainSensorView& main, QWidget* parent = nullptr);
     void show();
     void update(AbstractSensor* sensor) override;
+    const AbstractSensor* getSensor() const;
   signals:
     void clicked();
 };

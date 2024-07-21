@@ -36,6 +36,7 @@ class MainSensorView: public QWidget, public ObserverInterface {
   public:
     MainSensorView(AbstractSensor* sensor, QWidget* parent = nullptr);
     MainSensorView(QWidget* parent = nullptr);
+    ~MainSensorView();
     void update(AbstractSensor* sensor) override;
     void changeSensor(AbstractSensor* sensorPointer);
 

@@ -8,17 +8,18 @@
 namespace Sensor {
 namespace View {
 
-SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainSensorView* main, QWidget* parent)
+SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainSensorView& main, QWidget* parent)
     : QFrame(parent), sensor(sensor) , name_label(new QLabel()), sensor_type_label(new QLabel()), short_description_label(new QLabel())
 {
     setFrameShape(QFrame::StyledPanel);
+    setMaximumSize(99999, 100);
     QVBoxLayout* layout = new QVBoxLayout(this);
     
     layout->addWidget(name_label);
     layout->addWidget(sensor_type_label);
     layout->addWidget(short_description_label);
     
-    connect(this, SIGNAL(clicked()), main, SLOT(update(sensor)));
+    connect(this, SIGNAL(clicked()), &main, SLOT(update(sensor)));
     sensor.addObserver(this);
 }
 
@@ -38,6 +39,11 @@ void SmallSensorView::update(AbstractSensor* sensor) {
     }
 }
 
+const AbstractSensor* SmallSensorView::getSensor() const
+{
+    return &sensor;
+}
+
 void SmallSensorView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
@@ -45,5 +51,7 @@ void SmallSensorView::mousePressEvent(QMouseEvent *event)
     }
     QFrame::mousePressEvent(event);
 }
+
+
 }
 }

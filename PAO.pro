@@ -18,7 +18,8 @@ HEADERS += sensor/AbstractSensor.h \
            view/MainSensorView.h \
            view/MainWindow.h \
            view/SensorDialog.h \
-           view/SensorSmallView.h
+           view/SensorSmallView.h \
+           view/TableButtonItem.h
 SOURCES += main.cpp \
            sensor/AbstractSensor.cpp \
            sensor/Dust25S.cpp \
@@ -30,6 +31,8 @@ SOURCES += main.cpp \
            view/MainWindow.cpp \
            view/SensorDialog.cpp \
            view/SensorSmallView.cpp
+
+
 
 
 # Default rules for deployment.

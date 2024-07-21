@@ -5,8 +5,8 @@ namespace Sensor
 namespace View
 {
     
-MainWindow::MainWindow(Aside& aside, MainSensorView& main, QWidget *parent) 
-: QMainWindow(parent), aside(aside) ,main(main){    
+MainWindow::MainWindow(Aside& aside, MainSensorView& main, SensorManager& manager, QWidget *parent) 
+: QMainWindow(parent), aside(aside) ,main(main), manager(manager){    
     QWidget* centralWidget = new QWidget(this);
     QHBoxLayout* mainWindowLayout = new QHBoxLayout(centralWidget);
     mainWindowLayout->addWidget(&aside);
@@ -19,6 +19,10 @@ void MainWindow::changeMain(AbstractSensor* sensor){
     main.changeSensor(sensor);
 };
 
-MainWindow::~MainWindow() {};
+MainWindow::~MainWindow() {
+    delete &aside;
+    delete &main;
+    delete &manager;
+};
 } 
 } 

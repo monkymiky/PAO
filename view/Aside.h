@@ -21,13 +21,13 @@ namespace View {
 class Aside: public QWidget, public ObserverInterface {
     Q_OBJECT
   private:
-    SensorManager& sensorManager;
-    std::vector<SmallSensorView*> sensorViewList;
-    QScrollArea* SensorScrollArea;
-    QHBoxLayout* SensorListLayout;
-    MainSensorView* main; 
+    SensorManager& manager;
+    std::vector<SmallSensorView*> sensorSViewList;
+    QFrame* sensorScrollFrame;
+    QVBoxLayout* SensorListLayout;
+    MainSensorView& main; 
   public:
-    Aside(SensorManager& sensorManager,MainSensorView* main, QWidget* parent = nullptr);
+    Aside(SensorManager& manager,MainSensorView& main, QWidget* parent = nullptr);
     void show();
     void update(AbstractSensor* sensor) override;
   

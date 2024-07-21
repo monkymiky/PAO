@@ -19,6 +19,8 @@
 #include <QtWidgets/qdialog.h>
 #include "sensorSmallView.h"
 #include "../sensor/SensorManager.h"
+#include <QtWidgets/QTableWidget>
+#include "TableButtonItem.h"
 
 namespace Sensor {
 namespace View {
@@ -26,11 +28,7 @@ namespace View {
 class SensorDialog: public QDialog {
     Q_OBJECT
   private:
-    SensorManager* manager;
-
-    std::vector<std::array<QLineEdit*, 2>> points;
-    QGridLayout* dataLayout;
-    QPushButton addP;
+    SensorManager& manager;
 
     QLineEdit  titleLE;
     QLineEdit  shortDescLE;
@@ -38,7 +36,6 @@ class SensorDialog: public QDialog {
     QLineEdit  sensibilityLE;
     QLineEdit  spanSimulLE;
     QComboBox  typeCB;
-    QLineEdit  xAxisLE;
     QLineEdit  maxLE;
     QLineEdit  minLE;
     
@@ -60,18 +57,25 @@ class SensorDialog: public QDialog {
     QFrame  humidFrame;
     QFrame  dustFrame;
 
+    QGridLayout* dataLayout;
+    TableButtonItem* addP;
+    QFrame dataOutFrame;
+    QLabel  dataL;
+    QTableWidgetItem* yAxisLabelItem;
+    QTableWidget* tableWidget;
     
 
     void addFrame(QString label, QWidget & widget, QLayout& layout);
-    void addPoint();
+   
   
   public:
-    SensorDialog(SensorManager* manager,QWidget* parent =  nullptr);
-    ~SensorDialog();
+    SensorDialog(SensorManager& manager,QWidget* parent =  nullptr);
+    
   private slots:
-    void closeDialog();
     void saveSensor();
     void showType(int index);
+    void addPoint();
+    void removeColumn();
 };
 
 }
