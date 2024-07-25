@@ -70,6 +70,7 @@ class SensorDialog: public QDialog {
   
   public:
     SensorDialog(SensorManager& manager,QWidget* parent =  nullptr);
+    SensorDialog(SensorManager& manager,AbstractSensor* sensor, QWidget* parent =  nullptr);
     
   private slots:
     void saveSensor();

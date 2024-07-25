@@ -3,6 +3,7 @@
 
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
+#include "../sensor/SensorManager.h"
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QFrame>
@@ -22,6 +23,7 @@ class MainSensorView: public QWidget, public ObserverInterface {
     Q_OBJECT
   private:
     AbstractSensor* sensor;
+    SensorManager& manager;
     QLabel *title;
     QLabel *type;
     QLabel *sensibility;
@@ -34,8 +36,8 @@ class MainSensorView: public QWidget, public ObserverInterface {
     QChartView* chartView;
     QLabel *longDesc;
   public:
-    MainSensorView(AbstractSensor* sensor, QWidget* parent = nullptr);
-    MainSensorView(QWidget* parent = nullptr);
+    MainSensorView(AbstractSensor* sensor, SensorManager& manager, QWidget* parent = nullptr);
+    MainSensorView(SensorManager& manager, QWidget* parent = nullptr);
     ~MainSensorView();
     void update(AbstractSensor* sensor = nullptr) override;
     void changeSensor(AbstractSensor* sensorPointer);

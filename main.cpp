@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     Sensor::SensorManager  manager =  Sensor::SensorManager();
-    Sensor::View::MainSensorView  main =  Sensor::View::MainSensorView();
+    Sensor::View::MainSensorView  main =  Sensor::View::MainSensorView(manager);
     Sensor::View::Aside  aside =  Sensor::View::Aside(manager, main);
     // debug
     std::string prova = "prova";

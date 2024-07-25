@@ -186,9 +186,48 @@ SensorDialog::SensorDialog(SensorManager& manager, QWidget* parent)
     connect(save, SIGNAL(clicked()), this,SLOT(saveSensor()));
     
     
+}
+SensorDialog::SensorDialog(SensorManager &manager, AbstractSensor *sensor, QWidget *parent)
+    : manager(manager),
+    QDialog(parent),
+    titleLE(QLineEdit(this)),
+    shortDescLE(QLineEdit(this)),
+    longDescTE(QTextEdit(this)),
+    sensibilityLE(QLineEdit(this)),
+    spanSimulLE(QLineEdit(this)),
+    typeCB(QComboBox(this)),
+    maxLE(QLineEdit(this)),
+    minLE(QLineEdit(this)),
+
+    dustA(QLineEdit(this)),
+    dustB(QLineEdit(this)),
+
+    humidA(QLineEdit(this)),
+    humidB(QLineEdit(this)),
+    humidC(QLineEdit(this)),
+
+    tempR0(QLineEdit(this)),
+    tempAlpha(QLineEdit(this)),
+    tempBeta(QLineEdit(this)),
+    tempGamma(QLineEdit(this)),
+    tempDelta(QLineEdit(this)),
+    tempEpsilon(QLineEdit(this)),
+    tempZeta(QLineEdit(this)),
+
+    tempFrame(QFrame(this)),
+    humidFrame(QFrame(this)),
+    dustFrame(QFrame(this)),
+
+    addP(new TableButtonItem("+", 2)),
+    dataOutFrame(QFrame(this)),
+
+    dataL(QLabel(QString::fromStdString("Misurazioni: "), this)),
+    yAxisLabelItem(new QTableWidgetItem("")),
+    tableWidget(new QTableWidget(3, 3, this))
+    {
+    //use the previous constructor to create the dialog and then fill the fields with the sensor's data
+
 };
-
-
 
 void SensorDialog::saveSensor(){
     std::string name = titleLE.text().toStdString();

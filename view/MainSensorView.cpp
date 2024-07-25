@@ -11,8 +11,8 @@
 
 namespace Sensor { 
 namespace View {
-MainSensorView::MainSensorView(AbstractSensor *sensor, QWidget *parent)
-: QWidget(parent), sensor(sensor)
+MainSensorView::MainSensorView(AbstractSensor *sensor,SensorManager& manager , QWidget *parent)
+: QWidget(parent),manager(manager) , sensor(sensor)
 {
 
     QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
@@ -105,7 +105,7 @@ MainSensorView::~MainSensorView() {
     delete(chartView);
     delete(series);
 };
-MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
+MainSensorView::MainSensorView(SensorManager& manager,  QWidget* parent): manager(manager), QWidget(parent), sensor(nullptr)
 {
     QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
     MainSensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -229,8 +229,8 @@ void  MainSensorView::changeSensor(AbstractSensor* sensorPointer){
 };
 
 void  MainSensorView::openSensorDialog(){
-    //SensorDialog* typeDialog = new SensorDialog( manager, qobject_cast<QWidget*>(parent()));
-    //typeDialog->exec();
+    SensorDialog* typeDialog = new SensorDialog( manager, sensor, qobject_cast<QWidget*>(parent()));
+    typeDialog->exec();
 };
 
 void MainSensorView::deleteSensor(){
