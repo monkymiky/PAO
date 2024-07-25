@@ -188,39 +188,44 @@ MainSensorView::MainSensorView(SensorManager& manager,  QWidget* parent): manage
     
 };
 
-void MainSensorView::update(AbstractSensor* sensor) {
+void MainSensorView::update(AbstractSensor* newsensor) {
+    if(sensor != nullptr){
+        sensor->removeObserver(this);
+    }
+     
     std::cout << "update main" << std::endl;
-    if(sensor == nullptr){
+    if(newsensor == nullptr){
         std::cerr << "sensor is null MainSensorView::update" << std::endl;
         return;
     }
 
-    title->setText(QString::fromStdString(sensor->getName()));
-    type->setText(QString::fromStdString("Sensore: " + sensor->getSensorType()));
-    sensibility->setText(QString::fromStdString("Sensibilità: " + std::to_string(sensor->getSensibility())));
-    min->setText(QString::fromStdString("Min: " + std::to_string(sensor->getMin())));
-    max->setText(QString::fromStdString("Max: " + std::to_string(sensor->getMax())));
-    mean->setText(QString::fromStdString("Media: " + std::to_string(sensor->getAverage())));
-    variance->setText(QString::fromStdString("Varianza: " +std::to_string(sensor->getVariance())));
-    longDesc->setText(QString::fromStdString(sensor->getLongDescription()));
+    title->setText(QString::fromStdString(newsensor->getName()));
+    type->setText(QString::fromStdString("Sensore: " + newsensor->getSensorType()));
+    sensibility->setText(QString::fromStdString("Sensibilità: " + std::to_string(newsensor->getSensibility())));
+    min->setText(QString::fromStdString("Min: " + std::to_string(newsensor->getMin())));
+    max->setText(QString::fromStdString("Max: " + std::to_string(newsensor->getMax())));
+    mean->setText(QString::fromStdString("Media: " + std::to_string(newsensor->getAverage())));
+    variance->setText(QString::fromStdString("Varianza: " +std::to_string(newsensor->getVariance())));
+    longDesc->setText(QString::fromStdString(newsensor->getLongDescription()));
 
     chart->removeAllSeries();
     series = new QLineSeries();
-    for (auto point : sensor->getMeasure()) {
+    for (auto point : newsensor->getMeasure()) {
         series->append(point[1], point[0]); 
     }
     chart->addSeries(series);
     QList<QAbstractAxis *> horizontalAxes = chart->axes(Qt::Horizontal);
     for (QAbstractAxis* axis : horizontalAxes) {
-        axis->setTitleText(QString::fromStdString(sensor->getXAxisLabel()));
+        axis->setTitleText(QString::fromStdString(newsensor->getXAxisLabel()));
     }
     QList<QAbstractAxis *> verticalAxes = chart->axes(Qt::Vertical);
     for (QAbstractAxis* axis : verticalAxes) {
-        axis->setTitleText(QString::fromStdString(sensor->getYAxisLabel()));
+        axis->setTitleText(QString::fromStdString(newsensor->getYAxisLabel()));
     }
-    chart->setTitle(QString::fromStdString(sensor->getName()));
+    chart->setTitle(QString::fromStdString(newsensor->getName()));
     chartView->setMinimumSize(this->width()-50, this->width()-50);
-
+    sensor = newsensor;
+    sensor->addObserver(this);
 };
 
 void  MainSensorView::changeSensor(AbstractSensor* sensorPointer){

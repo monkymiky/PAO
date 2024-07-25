@@ -100,7 +100,6 @@ void AbstractSensor::simulate(){
             addPoint(tmp);
         }
     }
-    
 notifyAllObservers(this);
 }
 
