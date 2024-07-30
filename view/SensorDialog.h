@@ -21,6 +21,7 @@
 #include "../sensor/SensorManager.h"
 #include <QtWidgets/QTableWidget>
 #include "TableButtonItem.h"
+#include <unordered_map>
 
 namespace Sensor {
 namespace View {
@@ -29,13 +30,15 @@ class SensorDialog: public QDialog {
     Q_OBJECT
   private:
     SensorManager& manager;
+    AbstractSensor* sensor;
+    std::unordered_map<std::string, QLineEdit*> dataFields;
 
     QLineEdit  titleLE;
     QLineEdit  shortDescLE;
     QTextEdit  longDescTE;
     QLineEdit  sensibilityLE;
     QLineEdit  spanSimulLE;
-    QComboBox  typeCB;
+    QComboBox * typeCB;
     QLineEdit  maxLE;
     QLineEdit  minLE;
     
@@ -65,8 +68,7 @@ class SensorDialog: public QDialog {
     QTableWidget* tableWidget;
     
 
-    void addFrame(QString label, QWidget & widget, QLayout& layout);
-   
+    void addFrame(QString label, QWidget & widget, QLayout& layout);   
   
   public:
     SensorDialog(SensorManager& manager,QWidget* parent =  nullptr);

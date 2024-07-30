@@ -19,7 +19,8 @@ HEADERS += sensor/AbstractSensor.h \
            view/MainWindow.h \
            view/SensorDialog.h \
            view/SensorSmallView.h \
-           view/TableButtonItem.h
+           view/TableButtonItem.h \
+           view/ModifySensorVisitor.h
 SOURCES += main.cpp \
            sensor/AbstractSensor.cpp \
            sensor/Dust25S.cpp \
@@ -30,7 +31,8 @@ SOURCES += main.cpp \
            view/MainSensorView.cpp \
            view/MainWindow.cpp \
            view/SensorDialog.cpp \
-           view/SensorSmallView.cpp
+           view/SensorSmallView.cpp \
+           view/ModifySensorVisitor.cpp
 
 
 

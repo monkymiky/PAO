@@ -49,6 +49,7 @@ class AbstractSensor {
     AbstractSensor();
     void addPoint(std::array<float, 2>&);
     void deletePoint(int);
+    void clearPointVector();
     void addRawPoint(std::array<float, 2>&);
     void addPointVector(std::vector<std::array<float, 2>>&);
     virtual void simulate(); 

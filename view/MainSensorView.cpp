@@ -210,17 +210,32 @@ void MainSensorView::update(AbstractSensor* newsensor) {
 
     chart->removeAllSeries();
     series = new QLineSeries();
+    float upperY, lowerY, upperX, lowerX;
+    if(newsensor->getMeasure().size() != 0){
+        upperY =  newsensor->getMeasure()[0][0];
+        lowerY = newsensor->getMeasure()[0][0];
+        upperX = newsensor->getMeasure()[0][1];
+        lowerX = newsensor->getMeasure()[0][1];
+    }
+    
     for (auto point : newsensor->getMeasure()) {
+        if(point[0] > upperY) upperY = point[0];
+        if(point[0] < lowerY) lowerY = point[0];
+        if(point[1] > upperX) upperX = point[1];
+        if(point[1] < lowerX) lowerX = point[1];
         series->append(point[1], point[0]); 
     }
+
     chart->addSeries(series);
     QList<QAbstractAxis *> horizontalAxes = chart->axes(Qt::Horizontal);
     for (QAbstractAxis* axis : horizontalAxes) {
         axis->setTitleText(QString::fromStdString(newsensor->getXAxisLabel()));
+        axis->setRange(lowerX, upperX);
     }
     QList<QAbstractAxis *> verticalAxes = chart->axes(Qt::Vertical);
     for (QAbstractAxis* axis : verticalAxes) {
         axis->setTitleText(QString::fromStdString(newsensor->getYAxisLabel()));
+        axis->setRange(lowerY, upperY);
     }
     chart->setTitle(QString::fromStdString(newsensor->getName()));
     chartView->setMinimumSize(this->width()-50, this->width()-50);

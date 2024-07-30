@@ -1,6 +1,7 @@
 #include "AbstractSensor.h"
 #include <random>
 #include <cmath>
+#include <iostream>
 
 namespace Sensor{
 
@@ -53,6 +54,14 @@ void AbstractSensor::deletePoint(int index){
     
 notifyAllObservers(this);
 }
+void AbstractSensor::clearPointVector(){
+    measure.clear();
+    max = 0;
+    min = 0;
+    average = 0;
+    variance = 0;
+    lastMeasureTime = 0;
+}
 void AbstractSensor::addRawPoint(std::array<float,2>& point){
     std::array<float,2> tmp = {trasmute(point[0]), point[1]};
     addPoint(tmp);
@@ -89,14 +98,21 @@ void AbstractSensor::simulate(){
         for (int i = 0; i < 20; ++i) {
             do{
                 randomMeasure = distribution(generator);
-            }while(randomMeasure > minMeasurable && randomMeasure < maxMeasurable);
-            std::array<float,2> tmp = {randomMeasure,static_cast<int>(lastMeasureTime) +1 + i * simulationSpan};
+            }while(randomMeasure < minMeasurable || randomMeasure > maxMeasurable);
+            float x = static_cast<int>(lastMeasureTime)  +  simulationSpan;
+            std::cerr << "Simulating sensor " << i << "y = " << randomMeasure << std::endl;
+            std::cerr << "min  = " << minMeasurable << "max =  " << maxMeasurable << std::endl;
+            std::array<float,2> tmp = {randomMeasure,x};
             addPoint(tmp);
         }
     }
     else{
         for (int i = 0; i < 20; ++i) {
-            std::array<float,2> tmp = {(rand()%(int)((maxMeasurable - minMeasurable) + minMeasurable)),static_cast<int>(lastMeasureTime) +1 + i * simulationSpan};
+            float y = (rand()%(int)((maxMeasurable - minMeasurable) + minMeasurable +1));
+            float x = static_cast<int>(lastMeasureTime) +  simulationSpan;
+            std::cerr << "Simulating sensor " << i << "y = " << y << std::endl;
+            std::cerr << "Simulating sensor " << i << "x = " << x << std::endl;
+            std::array<float,2> tmp = {y,x};
             addPoint(tmp);
         }
     }
