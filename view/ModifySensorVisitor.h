@@ -36,11 +36,11 @@ public:
     QComboBox* getTypeCB() const { return typeCB; }
     QString* getYAxisLabel() const { return yAxisLabel; }
 
-    void visitTemperaturePRTS(TemperaturePRTS& sensor) override ;
+    void visitTemperaturePRTS(const TemperaturePRTS& sensor) override ;
 
-    void visitHumidityNTCS(HumidityNTCS& sensor) override ;
+    void visitHumidityNTCS(const HumidityNTCS& sensor) override ;
 
-    void visitDust25S(Dust25S& sensor) override ;
+    void visitDust25S(const Dust25S& sensor) override ;
 };
 }
 }

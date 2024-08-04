@@ -19,7 +19,7 @@ namespace Sensor {
         typeCB(new QComboBox(parent)), sensorDataFrame(new QFrame(parent))
         {}
 
-        void ModifySensorVisitor::visitTemperaturePRTS(TemperaturePRTS& sensor) {
+        void ModifySensorVisitor::visitTemperaturePRTS(const TemperaturePRTS& sensor) {
         typeCB->addItem("Temperatura NTP", 0);
         typeCB->addItem("Umidità NTC", 1);
         typeCB->addItem("Polveri PM 2,5", 2);
@@ -46,7 +46,7 @@ namespace Sensor {
         addDataField(QString::fromStdString("Zeta"),QString::number(sensor.getZeta()) , sensorDataFrame, tempLayout);
         }
         
-        void ModifySensorVisitor::visitHumidityNTCS(HumidityNTCS& sensor) {
+        void ModifySensorVisitor::visitHumidityNTCS(const HumidityNTCS& sensor) {
             typeCB->addItem("Temperatura NTP", 0);
             typeCB->addItem("Umidità NTC", 1);
             typeCB->addItem("Polveri PM 2,5", 2);
@@ -70,7 +70,7 @@ namespace Sensor {
             addDataField(QString::fromStdString("C"),QString::number(sensor.getC()) , sensorDataFrame, humidLayout);
         }
 
-        void ModifySensorVisitor::visitDust25S(Dust25S& sensor){
+        void ModifySensorVisitor::visitDust25S(const Dust25S& sensor){
         typeCB->addItem("Temperatura NTP", 0);
         typeCB->addItem("Umidità NTC", 1);
         typeCB->addItem("Polveri PM 2,5", 2);

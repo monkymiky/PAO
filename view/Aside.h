@@ -3,6 +3,11 @@
 
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
+#include "../sensor/SensorManager.h"
+#include "MainSensorView.h"
+#include "SensorSmallView.h"
+#include "MainWindow.h"
+
 #include <vector>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLabel>
@@ -10,29 +15,27 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
-#include "../sensor/SensorManager.h"
-#include "MainSensorView.h"
-#include "SensorSmallView.h"
+
+
 
 
 namespace Sensor {
 namespace View {
+  class SmallSensorView;
+  class MainWindow;
 
-class Aside: public QWidget, public ObserverInterface {
+class Aside: public QWidget {
     Q_OBJECT
   private:
-    SensorManager& manager;
-    std::vector<SmallSensorView*> sensorSViewList;
+    std::list<SmallSensorView*> smallSViewList;
     QFrame* sensorScrollFrame;
-    QVBoxLayout* SensorListLayout;
-    MainSensorView& main; 
+    QVBoxLayout* SensorListLayout; 
   public:
-    Aside(SensorManager& manager,MainSensorView& main, QWidget* parent = nullptr);
-    void show();
-    void update(AbstractSensor* sensor) override;
-  
-  private slots:
-    void addNewSensorClicked();
+    Aside(QWidget* parent = nullptr);
+    void clearSSVList();
+    void deleteSSV(AbstractSensor* sensor);
+    void addSSV(SmallSensorView* ssv);
+
   
 };
 

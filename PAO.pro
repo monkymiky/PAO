@@ -35,7 +35,8 @@ SOURCES += main.cpp \
            view/SensorDialog.cpp \
            view/SensorSmallView.cpp \
            view/ModifySensorVisitor.cpp \
-           sensor/JsonVisitor.cpp
+           sensor/JsonVisitor.cpp \
+           sensor/JsonPharser.cpp
 
 
 

@@ -7,11 +7,11 @@ namespace Sensor{
 
 class Dust25S : public AbstractSensor{
     private:
-    float a;
-    float b;
+    double a;
+    double b;
 
     protected:
-    float trasmute(float rawMeasure) const override;
+    double trasmute(double rawMeasure) const override;
 
     public:
     ~Dust25S();
@@ -21,18 +21,18 @@ class Dust25S : public AbstractSensor{
             const  std::string longDesc,
             const  std::string xAxisLabel,
             const  unsigned int simulationSpan,
-            const  float sensibility,
-            const  float maxMeasurable,
-            const  float minMeasurable,
-            const float a = 1.2,
-            const float b = 5);
+            const  double sensibility,
+            const  double maxMeasurable,
+            const  double minMeasurable,
+            const double a = 1.2,
+            const double b = 5);
 
     void accept(VisitorInterface& visitor) override;
-    float getA() const;
-    float getB() const;
+    double getA() const;
+    double getB() const;
 
-    void setA( float) ;
-    void setB( float) ;
+    void setA( double) ;
+    void setB( double) ;
 };
 
 }

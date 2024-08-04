@@ -3,6 +3,7 @@
 
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
+#include "MainWindow.h"
 #include <vector>
 #include <array>
 #include <QtWidgets/QWidget>
@@ -29,7 +30,7 @@ namespace View {
 class SensorDialog: public QDialog {
     Q_OBJECT
   private:
-    SensorManager& manager;
+    MainWindow& mainWindow;
     AbstractSensor* sensor;
     std::unordered_map<std::string, QLineEdit*> dataFields;
 
@@ -65,14 +66,13 @@ class SensorDialog: public QDialog {
     QFrame dataOutFrame;
     QLabel  dataL;
     QTableWidgetItem* yAxisLabelItem;
-    QTableWidget* tableWidget;
+    QTableWidget* tableWidget; 
     
 
     void addFrame(QString label, QWidget & widget, QLayout& layout);   
   
   public:
-    SensorDialog(SensorManager& manager,QWidget* parent =  nullptr);
-    SensorDialog(SensorManager& manager,AbstractSensor* sensor, QWidget* parent =  nullptr);
+    SensorDialog(MainWindow& mainWinow, AbstractSensor* sensor = nullptr);
     
   private slots:
     void saveSensor();

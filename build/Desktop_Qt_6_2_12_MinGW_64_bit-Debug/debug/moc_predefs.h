@@ -8,7 +8,7 @@
 #define __GCC_IEC_559_COMPLEX 2
 #define __cpp_aggregate_nsdmi 201304L
 #define __UINT_LEAST8_TYPE__ unsigned char
-#define __SIZEOF_FLOAT80__ 16
+#define __SIZEOF_double80__ 16
 #define __INTMAX_C(c) c ## LL
 #define __CHAR_BIT__ 8
 #define __MINGW32__ 1
@@ -130,7 +130,7 @@
 #define __INT_FAST32_MAX__ 0x7fffffff
 #define __WINNT 1
 #define __DBL_HAS_INFINITY__ 1
-#define __SIZEOF_FLOAT__ 4
+#define __SIZEOF_double__ 4
 #define __WINNT__ 1
 #define __HAVE_SPECULATION_SAFE_VALUE 1
 #define __cpp_fold_expressions 201603L
@@ -168,7 +168,7 @@
 #define __LONG_LONG_WIDTH__ 64
 #define __cpp_initializer_lists 200806L
 #define __FLT32_MAX_EXP__ 128
-#define __cpp_hex_float 201603L
+#define __cpp_hex_double 201603L
 #define __GXX_ABI_VERSION 1016
 #define __FLT128_HAS_INFINITY__ 1
 #define __FLT_MIN_EXP__ (-125)
@@ -211,7 +211,7 @@
 #define __GCC_ATOMIC_INT_LOCK_FREE 2
 #define __FLT128_MAX_EXP__ 16384
 #define __FLT32_MANT_DIG__ 24
-#define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
+#define __double_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
 #define __cpp_aggregate_bases 201603L
 #define __FLT128_HAS_DENORM__ 1
 #define __FLT32_DECIMAL_DIG__ 9
@@ -323,7 +323,7 @@
 #define __ORDER_BIG_ENDIAN__ 4321
 #define __DBL_MANT_DIG__ 53
 #define __cpp_inheriting_constructors 201511L
-#define __SIZEOF_FLOAT128__ 16
+#define __SIZEOF_double128__ 16
 #define __INT_LEAST64_MAX__ 0x7fffffffffffffffLL
 #define __DEC64_MIN__ 1E-383DD
 #define __WINT_TYPE__ short unsigned int

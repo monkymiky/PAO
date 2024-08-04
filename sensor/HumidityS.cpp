@@ -10,12 +10,12 @@ HumidityNTCS::~HumidityNTCS(){};
 void HumidityNTCS::createInterpolationTable(){
     for (int i = 0; i <101; ++i) {
         // Calculate the rawMeasure for a relative humidity value
-        float resistenza = 100 + (900.0 / (100)) * i;  // Resistance varies from 100 to 1000 Ohms
-        float UR = 100 * (a + b * log(resistenza) + c * pow(log(resistenza), 2));
+        double resistenza = 100 + (900.0 / (100)) * i;  // Resistance varies from 100 to 1000 Ohms
+        double UR = 100 * (a + b * log(resistenza) + c * pow(log(resistenza), 2));
         interpolationTable.push_back(UR);
     } 
 };
-float HumidityNTCS::trasmute(float rawMeasure) const  {
+double HumidityNTCS::trasmute(double rawMeasure) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -30,14 +30,14 @@ float HumidityNTCS::trasmute(float rawMeasure) const  {
     }
 
     // Interpolate the humidity between the two values in the interpolationTable
-    float interpolatedHumidity = 0.0;
+    double interpolatedHumidity = 0.0;
     if (inf == sup) {
         interpolatedHumidity = interpolationTable[inf];
     } else {
-        float humidityInf = interpolationTable[inf];
-        float humiditySup = interpolationTable[sup];
-        float rawMeasureInf = 100 + (900.0 / (interpolationTable.size() - 1)) * inf;
-        float rawMeasureSup = 100 + (900.0 / (interpolationTable.size() - 1)) * sup;
+        double humidityInf = interpolationTable[inf];
+        double humiditySup = interpolationTable[sup];
+        double rawMeasureInf = 100 + (900.0 / (interpolationTable.size() - 1)) * inf;
+        double rawMeasureSup = 100 + (900.0 / (interpolationTable.size() - 1)) * sup;
 
         interpolatedHumidity = humidityInf + 
         ((rawMeasure - rawMeasureInf) / (rawMeasureSup - rawMeasureInf)) * 
@@ -46,20 +46,20 @@ float HumidityNTCS::trasmute(float rawMeasure) const  {
 
     return interpolatedHumidity;
 };
-HumidityNTCS::HumidityNTCS(): AbstractSensor("", "Resistenza NTC", "", "", "","Umidità relativa %", 0, 0, 0, 0 ),a(0), b(0), c(0), interpolationTable(std::vector<float>()){};
+HumidityNTCS::HumidityNTCS(): AbstractSensor("", "Resistenza NTC", "", "", "","Umidità relativa %", 0, 0, 0, 0 ),a(0), b(0), c(0), interpolationTable(std::vector<double>()){};
 HumidityNTCS::HumidityNTCS( const std::string name, 
                             const  std::string shortDesc,
                             const  std::string longDesc,
                             const  std::string xAxisLabel,
                             const  unsigned int simulationSpan,
-                            const  float sensibility,
-                            const  float maxMeasurable,
-                            const  float minMeasurable,
-                            const float a,
-                            const float b,
-                            const float c) 
+                            const  double sensibility,
+                            const  double maxMeasurable,
+                            const  double minMeasurable,
+                            const double a,
+                            const double b,
+                            const double c) 
                             : AbstractSensor(name, "Resistenza NTC", shortDesc, longDesc, xAxisLabel,"Umidità relativa %", simulationSpan, sensibility, maxMeasurable, minMeasurable ),
-                            a(a), b(b), c(c), interpolationTable(std::vector<float>())
+                            a(a), b(b), c(c), interpolationTable(std::vector<double>())
                             {
                                 createInterpolationTable();
                             };
@@ -69,22 +69,22 @@ void HumidityNTCS::accept(VisitorInterface& visitor){
 };
 
 // getter
-float HumidityNTCS::getA() const {return a;};
-float HumidityNTCS::getB() const {return b;};
-float HumidityNTCS::getC() const {return c;};
+double HumidityNTCS::getA() const {return a;};
+double HumidityNTCS::getB() const {return b;};
+double HumidityNTCS::getC() const {return c;};
 
 // setter
-void HumidityNTCS::setA( float A){ 
+void HumidityNTCS::setA( double A){ 
     a=A ;
     if(b != 0 && c != 0) createInterpolationTable();
     notifyAllObservers(this);
     }
-void HumidityNTCS::setB( float B){ 
+void HumidityNTCS::setB( double B){ 
     b=B ;
     if(a != 0 && c != 0) createInterpolationTable();
     notifyAllObservers(this);
     }
-void HumidityNTCS::setC( float C){ 
+void HumidityNTCS::setC( double C){ 
     c=C ;
     if(a != 0 && b != 0) createInterpolationTable();
     notifyAllObservers(this);

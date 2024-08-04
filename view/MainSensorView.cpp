@@ -11,8 +11,8 @@
 
 namespace Sensor { 
 namespace View {
-MainSensorView::MainSensorView(AbstractSensor *sensor,SensorManager& manager , QWidget *parent)
-: QWidget(parent),manager(manager) , sensor(sensor)
+MainSensorView::MainSensorView(AbstractSensor *sensor , QWidget *parent)
+: QWidget(parent), sensor(sensor)
 {
 
     QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
@@ -24,18 +24,8 @@ MainSensorView::MainSensorView(AbstractSensor *sensor,SensorManager& manager , Q
     titleFrame->setLayout(titleFrameLayout);
 
     title = new QLabel(QString::fromStdString(sensor->getName()), titleFrame);
-    QPushButton *buttonSimulate = new QPushButton("Simula", titleFrame);
-    QPushButton *buttonModify = new QPushButton("Modifica", titleFrame);
-    QPushButton *buttonDelete = new QPushButton("Elimina", titleFrame);
     titleFrameLayout->addWidget(title);
     titleFrameLayout->addStretch();
-    titleFrameLayout->addWidget(buttonSimulate);
-    titleFrameLayout->addWidget(buttonModify);
-    titleFrameLayout->addWidget(buttonDelete);
-
-    connect(buttonModify, SIGNAL(clicked()), this,SLOT(openSensorDialog()));
-    connect(buttonDelete, SIGNAL(clicked()), this,SLOT(deleteSensor()));
-    connect(buttonSimulate, SIGNAL(clicked()), this,SLOT(simulate()));
 
     MainSensorViewLayout->addWidget(titleFrame);
 
@@ -105,7 +95,7 @@ MainSensorView::~MainSensorView() {
     delete(chartView);
     delete(series);
 };
-MainSensorView::MainSensorView(SensorManager& manager,  QWidget* parent): manager(manager), QWidget(parent), sensor(nullptr)
+MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
 {
     QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
     MainSensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -115,19 +105,10 @@ MainSensorView::MainSensorView(SensorManager& manager,  QWidget* parent): manage
     QHBoxLayout* titleFrameLayout = new QHBoxLayout(titleFrame);
     titleFrame->setLayout(titleFrameLayout);
 
-    title = new QLabel(QString::fromStdString("Nome Sensore"), titleFrame);
-    QPushButton *buttonSimulate = new QPushButton("Simula", titleFrame);
-    QPushButton *buttonModify = new QPushButton("Modifica", titleFrame);
-    QPushButton *buttonDelete = new QPushButton("Elimina", titleFrame);
+    title = new QLabel(QString::fromStdString("Titolo Sensore"), titleFrame);
+    
     titleFrameLayout->addWidget(title);
     titleFrameLayout->addStretch();
-    titleFrameLayout->addWidget(buttonSimulate);
-    titleFrameLayout->addWidget(buttonModify);
-    titleFrameLayout->addWidget(buttonDelete);
-
-    connect(buttonModify, SIGNAL(clicked()), this,SLOT(openSensorDialog()));
-    connect(buttonDelete, SIGNAL(clicked()), this,SLOT(deleteSensor()));
-    connect(buttonSimulate, SIGNAL(clicked()), this,SLOT(simulate()));
 
     MainSensorViewLayout->addWidget(titleFrame);
 
@@ -188,88 +169,88 @@ MainSensorView::MainSensorView(SensorManager& manager,  QWidget* parent): manage
     
 };
 
-void MainSensorView::update(AbstractSensor* newsensor) {
-    if(sensor != nullptr){
-        sensor->removeObserver(this);
-    }
-     
-    std::cout << "update main" << std::endl;
-    if(newsensor == nullptr){
-        std::cerr << "sensor is null MainSensorView::update" << std::endl;
+void MainSensorView::update( AbstractSensor* s){
+    if(sensor == nullptr){
+        title->setText("Titolo sensore:");
+        type->setText("Sensore:");
+        sensibility->setText("Sensibilità:");
+        min->setText("Min:");
+        max->setText("Max:");
+        mean->setText("Media:");
+        variance->setText("Varianza:");
+        longDesc->setText("Descrizione Lunga:");
+        series->clear();
+        chartView->show();
+        chart->setTitle("Titolo Sensore:");
+        QList<QAbstractAxis *> horizontalAxes = chart->axes(Qt::Horizontal);
+        for (QAbstractAxis* axis : horizontalAxes) {
+            axis->setTitleText(QString::fromStdString("x"));
+            
+        }
+        QList<QAbstractAxis *> verticalAxes = chart->axes(Qt::Vertical);
+        for (QAbstractAxis* axis : verticalAxes) {
+            axis->setTitleText(QString::fromStdString("y"));
+        }
         return;
     }
+    else{
+        title->setText(QString::fromStdString(sensor->getName()));
+        type->setText(QString::fromStdString("Sensore: " + sensor->getSensorType()));
+        sensibility->setText(QString::fromStdString("Sensibilità: " + std::to_string(sensor->getSensibility())));
+        min->setText(QString::fromStdString("Min: " + std::to_string(sensor->getMin())));
+        max->setText(QString::fromStdString("Max: " + std::to_string(sensor->getMax())));
+        mean->setText(QString::fromStdString("Media: " + std::to_string(sensor->getAverage())));
+        variance->setText(QString::fromStdString("Varianza: " +std::to_string(sensor->getVariance())));
+        longDesc->setText(QString::fromStdString(sensor->getLongDescription()));
 
-    title->setText(QString::fromStdString(newsensor->getName()));
-    type->setText(QString::fromStdString("Sensore: " + newsensor->getSensorType()));
-    sensibility->setText(QString::fromStdString("Sensibilità: " + std::to_string(newsensor->getSensibility())));
-    min->setText(QString::fromStdString("Min: " + std::to_string(newsensor->getMin())));
-    max->setText(QString::fromStdString("Max: " + std::to_string(newsensor->getMax())));
-    mean->setText(QString::fromStdString("Media: " + std::to_string(newsensor->getAverage())));
-    variance->setText(QString::fromStdString("Varianza: " +std::to_string(newsensor->getVariance())));
-    longDesc->setText(QString::fromStdString(newsensor->getLongDescription()));
+        chart->removeAllSeries();
+        series = new QLineSeries();
+        double upperY, lowerY, upperX, lowerX;
+        if(sensor->getMeasure().size() != 0){
+            upperY =  sensor->getMeasure()[0][0];
+            lowerY = sensor->getMeasure()[0][0];
+            upperX = sensor->getMeasure()[0][1];
+            lowerX = sensor->getMeasure()[0][1];
+        }
+        
+        for (auto point : sensor->getMeasure()) {
+            if(point[0] > upperY) upperY = point[0];
+            if(point[0] < lowerY) lowerY = point[0];
+            if(point[1] > upperX) upperX = point[1];
+            if(point[1] < lowerX) lowerX = point[1];
+            series->append(point[1], point[0]); 
+        }
 
-    chart->removeAllSeries();
-    series = new QLineSeries();
-    float upperY, lowerY, upperX, lowerX;
-    if(newsensor->getMeasure().size() != 0){
-        upperY =  newsensor->getMeasure()[0][0];
-        lowerY = newsensor->getMeasure()[0][0];
-        upperX = newsensor->getMeasure()[0][1];
-        lowerX = newsensor->getMeasure()[0][1];
+        chart->addSeries(series);
+        QList<QAbstractAxis *> horizontalAxes = chart->axes(Qt::Horizontal);
+        for (QAbstractAxis* axis : horizontalAxes) {
+            axis->setTitleText(QString::fromStdString(sensor->getXAxisLabel()));
+            axis->setRange(lowerX, upperX);
+        }
+        QList<QAbstractAxis *> verticalAxes = chart->axes(Qt::Vertical);
+        for (QAbstractAxis* axis : verticalAxes) {
+            axis->setTitleText(QString::fromStdString(sensor->getYAxisLabel()));
+            axis->setRange(lowerY, upperY);
+        }
+        chart->setTitle(QString::fromStdString(sensor->getName()));
+        chartView->setMinimumSize(this->width()-100, this->width()/2);
     }
-    
-    for (auto point : newsensor->getMeasure()) {
-        if(point[0] > upperY) upperY = point[0];
-        if(point[0] < lowerY) lowerY = point[0];
-        if(point[1] > upperX) upperX = point[1];
-        if(point[1] < lowerX) lowerX = point[1];
-        series->append(point[1], point[0]); 
-    }
-
-    chart->addSeries(series);
-    QList<QAbstractAxis *> horizontalAxes = chart->axes(Qt::Horizontal);
-    for (QAbstractAxis* axis : horizontalAxes) {
-        axis->setTitleText(QString::fromStdString(newsensor->getXAxisLabel()));
-        axis->setRange(lowerX, upperX);
-    }
-    QList<QAbstractAxis *> verticalAxes = chart->axes(Qt::Vertical);
-    for (QAbstractAxis* axis : verticalAxes) {
-        axis->setTitleText(QString::fromStdString(newsensor->getYAxisLabel()));
-        axis->setRange(lowerY, upperY);
-    }
-    chart->setTitle(QString::fromStdString(newsensor->getName()));
-    chartView->setMinimumSize(this->width()-50, this->width()-50);
-    sensor = newsensor;
-    sensor->addObserver(this);
 };
+
+
 
 void  MainSensorView::changeSensor(AbstractSensor* sensorPointer){
+    if (sensor){
+        sensor->removeObserver(this);
+    }
+    if(sensorPointer){
+        sensorPointer->addObserver(this);
+    }
     sensor = sensorPointer;
-    update(sensor);
+    update();
 };
+    
 
-void  MainSensorView::openSensorDialog(){
-    SensorDialog* typeDialog = new SensorDialog( manager, sensor, qobject_cast<QWidget*>(parent()));
-    typeDialog->exec();
-};
 
-void MainSensorView::deleteSensor(){
-    delete(sensor);
-    title->setText("deleted sensor");
-    type->setText("");
-    sensibility->setText("");
-    min->setText("");
-    max->setText("");
-    mean->setText("");
-    variance->setText("");
-    longDesc->setText("deleted sensor");
-    delete(chart);
-    delete(chartView);
-    delete(series);
-};
-
-void MainSensorView::simulate(){
-    sensor->simulate();
-};
 }
 }

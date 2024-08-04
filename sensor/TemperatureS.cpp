@@ -4,9 +4,9 @@
 
 namespace Sensor{
 
-float TemperaturePRTS::simulatePRTResistanceMeasurement(float temperature){
+double TemperaturePRTS::simulatePRTResistanceMeasurement(double temperature){
 // Calculate the PRT resistance at the specified temperature
-  float R = R0 * (1 + alpha * temperature 
+  double R = R0 * (1 + alpha * temperature 
                     + beta * temperature * temperature 
                     + gamma * temperature * temperature * temperature 
                     + delta * temperature * temperature * temperature * temperature 
@@ -16,12 +16,12 @@ float TemperaturePRTS::simulatePRTResistanceMeasurement(float temperature){
 };
 
 void TemperaturePRTS::createInterpolationTable(){
-    for (float temperature = (int)getMinMeasurable(); temperature <= (int)getMaxMeasurable()+1; temperature += 1.0) {
-    float resistance = simulatePRTResistanceMeasurement(temperature);
+    for (double temperature = (int)getMinMeasurable(); temperature <= (int)getMaxMeasurable()+1; temperature += 1.0) {
+    double resistance = simulatePRTResistanceMeasurement(temperature);
     interpolationTable.push_back(resistance);
   }
 };
-float TemperaturePRTS::trasmute(float resistance) const  {
+double TemperaturePRTS::trasmute(double resistance) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -36,14 +36,14 @@ float TemperaturePRTS::trasmute(float resistance) const  {
     }
 
     // Interpolate the temperature between the two values in the interpolationTable
-    float interpolatedTemperature = 0.0;
+    double interpolatedTemperature = 0.0;
     if (inf == sup) {
         interpolatedTemperature = interpolationTable[inf];
     } else {
-        float temperatureInf = interpolationTable[inf];
-        float temperatureSup = interpolationTable[sup];
-        float resistanceInf = interpolationTable[inf];
-        float resistanceSup = interpolationTable[sup];
+        double temperatureInf = interpolationTable[inf];
+        double temperatureSup = interpolationTable[sup];
+        double resistanceInf = interpolationTable[inf];
+        double resistanceSup = interpolationTable[sup];
 
         interpolatedTemperature = temperatureInf + 
         ((resistance - resistanceInf) / (resistanceSup - resistanceInf)) * 
@@ -53,25 +53,25 @@ float TemperaturePRTS::trasmute(float resistance) const  {
     return interpolatedTemperature;
 };
 
-TemperaturePRTS::TemperaturePRTS(): AbstractSensor("", "Resistenza PRT", "", "", "","Temperatura [C°]", 0, 0, 0, 0 ),R0(0), alpha(0), beta(0), gamma(0), delta(0), epsilon(0), zeta(0), interpolationTable(std::vector<float>()){};
+TemperaturePRTS::TemperaturePRTS(): AbstractSensor("", "Resistenza PRT", "", "", "","Temperatura [C°]", 0, 0, 0, 0 ),R0(0), alpha(0), beta(0), gamma(0), delta(0), epsilon(0), zeta(0), interpolationTable(std::vector<double>()){};
 
 TemperaturePRTS::TemperaturePRTS(   const std::string name, 
                                     const  std::string shortDesc,
                                     const  std::string longDesc,
                                     const  std::string xAxisLabel,
                                     const  unsigned int simulationSpan,
-                                    const  float sensibility,
-                                    const  float maxMeasurable,
-                                    const  float minMeasurable,
-                                    const float R0 = 100,
-                                    const float alpha = 3.9083e-3,
-                                    const float beta = -5.6823e-6,
-                                    const float gamma = -4.1016e-8,
-                                    const float delta = 1.27e-10,
-                                    const float epsilon = -1.76e-13,
-                                    const float zeta =  2.04e-16) 
+                                    const  double sensibility,
+                                    const  double maxMeasurable,
+                                    const  double minMeasurable,
+                                    const double R0 = 100,
+                                    const double alpha = 3.9083e-3,
+                                    const double beta = -5.6823e-6,
+                                    const double gamma = -4.1016e-8,
+                                    const double delta = 1.27e-10,
+                                    const double epsilon = -1.76e-13,
+                                    const double zeta =  2.04e-16) 
                                     : AbstractSensor(name, "Resistenza PRT", shortDesc, longDesc, xAxisLabel,"Temperatura [C°]", simulationSpan, sensibility, maxMeasurable, minMeasurable ),
-                                    R0(R0), alpha(alpha), beta(beta), gamma(gamma), delta(delta), epsilon(epsilon), zeta(zeta), interpolationTable(std::vector<float>())
+                                    R0(R0), alpha(alpha), beta(beta), gamma(gamma), delta(delta), epsilon(epsilon), zeta(zeta), interpolationTable(std::vector<double>())
                                     {
                                         createInterpolationTable();
                                     };
@@ -81,39 +81,39 @@ void TemperaturePRTS::accept(VisitorInterface& visitor){
 };
 
 // getter
-float TemperaturePRTS::getR0() const {return R0;};
-float TemperaturePRTS::getAlpha() const {return alpha;};
-float TemperaturePRTS::getBeta() const {return beta;};
-float TemperaturePRTS::getGamma() const {return gamma;};
-float TemperaturePRTS::getDelta() const {return delta;};
-float TemperaturePRTS::getEpsilon() const {return epsilon;};
-float TemperaturePRTS::getZeta() const {return zeta;};
+double TemperaturePRTS::getR0() const {return R0;};
+double TemperaturePRTS::getAlpha() const {return alpha;};
+double TemperaturePRTS::getBeta() const {return beta;};
+double TemperaturePRTS::getGamma() const {return gamma;};
+double TemperaturePRTS::getDelta() const {return delta;};
+double TemperaturePRTS::getEpsilon() const {return epsilon;};
+double TemperaturePRTS::getZeta() const {return zeta;};
 // setter
-void TemperaturePRTS::setR0( float r0){ 
+void TemperaturePRTS::setR0( double r0){ 
     R0=r0 ;
     if(alpha!=0 && beta!=0 && gamma!=0 && delta!=0 && epsilon!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setAlpha( float a){ 
+void TemperaturePRTS::setAlpha( double a){ 
     alpha=a ;
     if(R0!=0 && beta!=0 && gamma!=0 && delta!=0 && epsilon!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setBeta( float b){
+void TemperaturePRTS::setBeta( double b){
     beta = b;
     if(R0!=0 && alpha!=0 && gamma!=0 && delta!=0 && epsilon!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setGamma( float g){
+void TemperaturePRTS::setGamma( double g){
     gamma =g ;
     if(R0!=0 && alpha!=0 && beta!=0 && delta!=0 && epsilon!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setDelta( float d){ 
+void TemperaturePRTS::setDelta( double d){ 
     delta= d;
     if(R0!=0 && alpha!=0 && beta!=0 && gamma!=0 && epsilon!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setEpsilon( float e){
+void TemperaturePRTS::setEpsilon( double e){
     epsilon =e ;
     if(R0!=0 && alpha!=0 && beta!=0 && gamma!=0 && delta!=0 && zeta!=0)createInterpolationTable();
     notifyAllObservers(this);}
-void TemperaturePRTS::setZeta( float z){ 
+void TemperaturePRTS::setZeta( double z){ 
     zeta=z ;
     if(R0!=0 && alpha!=0 && beta!=0 && gamma!=0 && delta!=0 && epsilon!=0)createInterpolationTable();
     notifyAllObservers(this);}

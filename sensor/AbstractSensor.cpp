@@ -5,14 +5,12 @@
 
 namespace Sensor{
 
-AbstractSensor::~AbstractSensor(){
-    notifyAllObservers(nullptr);
-}
+AbstractSensor::~AbstractSensor(){}
 AbstractSensor::AbstractSensor(): name(""), sensorType(""), shortDescription(""), 
                                 longDescription(""),  xAxisLabel(""), yAxisLabel(""),simulationSpan(0),
                                 sensibility(0), maxMeasurable(0), minMeasurable(0),min(0),max(0),
                                 average(0),variance(0),lastMeasureTime(0),
-                                measure(std::vector<std::array<float, 2>>()),
+                                measure(std::vector<std::array<double, 2>>()),
                                 observers(std::vector<ObserverInterface*>()){};
 AbstractSensor::AbstractSensor( const std::string name,
                                 const  std::string sensorType,
@@ -21,22 +19,22 @@ AbstractSensor::AbstractSensor( const std::string name,
                                 const  std::string xAxisLabel,
                                 const  std::string yAxisLabel,
                                 const  unsigned int simulationSpan,
-                                const  float sensibility,
-                                const  float maxMeasurable,
-                                const  float minMeasurable) : 
+                                const  double sensibility,
+                                const  double maxMeasurable,
+                                const  double minMeasurable) : 
                                 name(name), sensorType(sensorType), shortDescription(shortDesc), 
                                 longDescription(longDesc),  xAxisLabel(xAxisLabel), yAxisLabel(yAxisLabel),simulationSpan(simulationSpan),
                                 sensibility(sensibility), maxMeasurable(maxMeasurable), minMeasurable(minMeasurable),
                                 min(0),max(0),average(0),variance(0),lastMeasureTime(0), 
-                                measure(std::vector<std::array<float, 2>>()), observers(std::vector<ObserverInterface*>()){}
+                                measure(std::vector<std::array<double, 2>>()), observers(std::vector<ObserverInterface*>()){}
                                 
-void AbstractSensor::addPoint(std::array<float,2>& point){ // in questo progetto non è molto utile come funzione perche non c'è nessun sensore reale che aggiunge le misure una alla volta
+void AbstractSensor::addPoint(std::array<double,2>& point){ // in questo progetto non è molto utile come funzione perche non c'è nessun sensore reale che aggiunge le misure una alla volta
     measure.push_back(point);
     if (measure.size() > 1){
         if(max < point[0]) max = point[0];
         else if (min > point[0]) min = point[0];
         if(lastMeasureTime < point[1]) lastMeasureTime = point[1];
-        float diff = (point[0] - average);
+        double diff = (point[0] - average);
         variance = ((variance * (measure.size() - 1) + diff * diff)/measure.size() + (diff * average) / measure.size());
         average = (average * (measure.size()-1) + point[0] )/ measure.size();
     }else{
@@ -62,25 +60,25 @@ void AbstractSensor::clearPointVector(){
     variance = 0;
     lastMeasureTime = 0;
 }
-void AbstractSensor::addRawPoint(std::array<float,2>& point){
-    std::array<float,2> tmp = {trasmute(point[0]), point[1]};
+void AbstractSensor::addRawPoint(std::array<double,2>& point){
+    std::array<double,2> tmp = {trasmute(point[0]), point[1]};
     addPoint(tmp);
     
 notifyAllObservers(this);
 }
-void AbstractSensor::addPointVector(std::vector<std::array<float, 2>>& vector){
+void AbstractSensor::addPointVector(std::vector<std::array<double, 2>>& vector){
     measure.insert(measure.end(), std::move(vector.begin()), std::move(vector.end()));
-    float sum = 0;
-    for (std::array<float, 2> point : measure){
+    double sum = 0;
+    for (std::array<double, 2> point : measure){
         if(point[0] > max) max = point[0];
         else if(point[0]< min ) min = point[0];
         sum += point[0];
         if (point[1] > lastMeasureTime) lastMeasureTime = point[1];
     }
     average = sum / measure.size();
-    float squared_deviations = 0;
-     for (std::array<float, 2> point : measure){
-        float deviation = point[0] - average;
+    double squared_deviations = 0;
+     for (std::array<double, 2> point : measure){
+        double deviation = point[0] - average;
         squared_deviations += deviation * deviation;
      }
     variance = squared_deviations / measure.size();
@@ -92,27 +90,23 @@ void AbstractSensor::simulate(){
         // Create a normal distribution object
         std::random_device rd; // seed for random generator
         std::mt19937 generator(rd()); // random numbers generator
-        std::normal_distribution<float> distribution(average, std::sqrt(variance)); 
+        std::normal_distribution<double> distribution(average, std::sqrt(variance)); 
         // Generate 20 random values
-        float randomMeasure;
+        double randomMeasure;
         for (int i = 0; i < 20; ++i) {
             do{
                 randomMeasure = distribution(generator);
             }while(randomMeasure < minMeasurable || randomMeasure > maxMeasurable);
-            float x = static_cast<int>(lastMeasureTime)  +  simulationSpan;
-            std::cerr << "Simulating sensor " << i << "y = " << randomMeasure << std::endl;
-            std::cerr << "min  = " << minMeasurable << "max =  " << maxMeasurable << std::endl;
-            std::array<float,2> tmp = {randomMeasure,x};
+            double x = static_cast<int>(lastMeasureTime)  +  simulationSpan;
+            std::array<double,2> tmp = {randomMeasure,x};
             addPoint(tmp);
         }
     }
     else{
         for (int i = 0; i < 20; ++i) {
-            float y = (rand()%(int)((maxMeasurable - minMeasurable) + minMeasurable +1));
-            float x = static_cast<int>(lastMeasureTime) +  simulationSpan;
-            std::cerr << "Simulating sensor " << i << "y = " << y << std::endl;
-            std::cerr << "Simulating sensor " << i << "x = " << x << std::endl;
-            std::array<float,2> tmp = {y,x};
+            double y = (rand()%(int)((maxMeasurable - minMeasurable) + minMeasurable +1));
+            double x = static_cast<int>(lastMeasureTime) +  simulationSpan;
+            std::array<double,2> tmp = {y,x};
             addPoint(tmp);
         }
     }
@@ -124,13 +118,23 @@ void AbstractSensor::addObserver(ObserverInterface* observer) {
 }
 
 void AbstractSensor::removeObserver(ObserverInterface* observer){
-    for (int i = 0; i < observers.size(); i++) {
-        if(observers[i] == observer) observers.erase(observers.begin() + i);
+    int size  = observers.size();
+    int i = 0;
+    while (i < size) {
+        if(observers[i] == observer){
+            observers.erase(observers.begin() + i);
+            size--;
+            i--;
+        }
+        i++;
     }
+
 };
 
 void AbstractSensor::notifyAllObservers(AbstractSensor* sensor) {
-    for(auto observer : observers) observer->update(sensor);
+    if(observers.size() != 0){
+        for(auto observer : observers) observer->update(sensor);
+    }
 };
 
 // getter -----------------------------------------
@@ -142,14 +146,14 @@ const std::string& AbstractSensor::getLongDescription() const {return longDescri
 const std::string& AbstractSensor::getXAxisLabel() const {return xAxisLabel;}
 const std::string& AbstractSensor::getYAxisLabel() const{return yAxisLabel;};
 unsigned int AbstractSensor::getSimulationSpan() const {return simulationSpan;}
-float AbstractSensor::getMaxMeasurable() const {return maxMeasurable;}
-float AbstractSensor::getMinMeasurable() const {return minMeasurable;}
-float AbstractSensor::getMax() const {return max;}
-float AbstractSensor::getMin() const {return min;}
-float AbstractSensor::getAverage() const {return average;}
-float AbstractSensor::getVariance() const {return variance;}
-float AbstractSensor::getSensibility() const {return sensibility;}
-const std::vector<std::array<float, 2>>& AbstractSensor::getMeasure() const{return measure;};
+double AbstractSensor::getMaxMeasurable() const {return maxMeasurable;}
+double AbstractSensor::getMinMeasurable() const {return minMeasurable;}
+double AbstractSensor::getMax() const {return max;}
+double AbstractSensor::getMin() const {return min;}
+double AbstractSensor::getAverage() const {return average;}
+double AbstractSensor::getVariance() const {return variance;}
+double AbstractSensor::getSensibility() const {return sensibility;}
+const std::vector<std::array<double, 2>>& AbstractSensor::getMeasure() const{return measure;};
 
 // setter --------------------------------
 
@@ -177,16 +181,16 @@ void  AbstractSensor::setSimulationSpan( unsigned int sp)   {
     simulationSpan = sp;
     notifyAllObservers(this);
 }
-void  AbstractSensor::setMaxMeasurable(float maxM)  {
+void  AbstractSensor::setMaxMeasurable(double maxM)  {
     maxMeasurable = maxM;
     
     notifyAllObservers(this);
 }
-void  AbstractSensor::setMinMeasurable(float minM)  {
+void  AbstractSensor::setMinMeasurable(double minM)  {
     minMeasurable = minM;
     notifyAllObservers(this);
 }
-void  AbstractSensor::setSensibility(float sen)  {
+void  AbstractSensor::setSensibility(double sen)  {
     simulationSpan = sen;
     notifyAllObservers(this);
 }

@@ -7,18 +7,18 @@ namespace Sensor{
 
 class TemperaturePRTS : public AbstractSensor{
     private:
-    float R0;
-    float alpha;
-    float beta;
-    float gamma;
-    float delta;
-    float epsilon;
-    float zeta;
-    std::vector<float> interpolationTable;
+    double R0;
+    double alpha;
+    double beta;
+    double gamma;
+    double delta;
+    double epsilon;
+    double zeta;
+    std::vector<double> interpolationTable;
     void createInterpolationTable();
-    float simulatePRTResistanceMeasurement(float);
+    double simulatePRTResistanceMeasurement(double);
     protected:
-    float trasmute(float) const override;
+    double trasmute(double) const override;
 
     public:
     TemperaturePRTS();
@@ -27,34 +27,34 @@ class TemperaturePRTS : public AbstractSensor{
                         const  std::string longDesc,
                         const  std::string xAxisLabel,
                         const  unsigned int simulationSpan,
-                        const  float sensibility,
-                        const  float maxMeasurable,
-                        const  float minMeasurable,
-                        const float R0,
-                        const float alpha,
-                        const float beta,
-                        const float gamma,
-                        const float delta,
-                        const float epsilon,
-                        const float zeta);
+                        const  double sensibility,
+                        const  double maxMeasurable,
+                        const  double minMeasurable,
+                        const double R0,
+                        const double alpha,
+                        const double beta,
+                        const double gamma,
+                        const double delta,
+                        const double epsilon,
+                        const double zeta);
 
     void accept(VisitorInterface& visitor) override;
 
-    float getR0() const;
-    float getAlpha() const;
-    float getBeta() const;
-    float getGamma() const;
-    float getDelta() const;
-    float getEpsilon() const;
-    float getZeta() const;
+    double getR0() const;
+    double getAlpha() const;
+    double getBeta() const;
+    double getGamma() const;
+    double getDelta() const;
+    double getEpsilon() const;
+    double getZeta() const;
 
-    void setR0( float) ;
-    void setAlpha( float) ;
-    void setBeta( float) ;
-    void setGamma( float) ;
-    void setDelta( float) ;
-    void setEpsilon( float) ;
-    void setZeta( float) ;
+    void setR0( double) ;
+    void setAlpha( double) ;
+    void setBeta( double) ;
+    void setGamma( double) ;
+    void setDelta( double) ;
+    void setEpsilon( double) ;
+    void setZeta( double) ;
     
 };
 

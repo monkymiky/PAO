@@ -20,18 +20,18 @@ class AbstractSensor {
     std::string xAxisLabel;
     std::string yAxisLabel;
     unsigned int simulationSpan;
-    float sensibility;
-    float maxMeasurable;
-    float minMeasurable;
-    float min;
-    float max;
-    float average;
-    float variance;
-    float lastMeasureTime;
-    std::vector<std::array<float, 2>> measure; // measure[i][0] == misura;  measure[i][1] == tempo  ------------------- accesso sbagliato ma ilò senso è quello 
+    double sensibility;
+    double maxMeasurable;
+    double minMeasurable;
+    double min;
+    double max;
+    double average;
+    double variance;
+    double lastMeasureTime;
+    std::vector<std::array<double, 2>> measure; // measure[i][0] == misura;  measure[i][1] == tempo  ------------------- accesso sbagliato ma ilò senso è quello 
     std::vector<ObserverInterface*> observers;
     protected:
-    virtual float trasmute(float rawMeasure) const = 0;
+    virtual double trasmute(double rawMeasure) const = 0;
 
     public:
 
@@ -43,15 +43,15 @@ class AbstractSensor {
                         const  std::string xAxisLabel,
                         const  std::string yAxisLabel,
                         const  unsigned int simulationSpan,
-                        const  float sensibility,
-                        const  float maxMeasurable,
-                        const  float minMeasurable);
+                        const  double sensibility,
+                        const  double maxMeasurable,
+                        const  double minMeasurable);
     AbstractSensor();
-    void addPoint(std::array<float, 2>&);
+    void addPoint(std::array<double, 2>&);
     void deletePoint(int);
     void clearPointVector();
-    void addRawPoint(std::array<float, 2>&);
-    void addPointVector(std::vector<std::array<float, 2>>&);
+    void addRawPoint(std::array<double, 2>&);
+    void addPointVector(std::vector<std::array<double, 2>>&);
     virtual void simulate(); 
     virtual void accept(VisitorInterface& visitor) = 0;
     void addObserver(ObserverInterface* observer);
@@ -66,14 +66,14 @@ class AbstractSensor {
     const std::string& getXAxisLabel() const;
     const std::string& getYAxisLabel() const;
     unsigned int getSimulationSpan() const;
-    float getMaxMeasurable() const;
-    float getMinMeasurable() const;
-    float getMax() const;
-    float getMin() const;
-    float getAverage() const;
-    float getVariance() const;
-    float getSensibility() const;
-    const std::vector<std::array<float, 2>>& getMeasure() const;
+    double getMaxMeasurable() const;
+    double getMinMeasurable() const;
+    double getMax() const;
+    double getMin() const;
+    double getAverage() const;
+    double getVariance() const;
+    double getSensibility() const;
+    const std::vector<std::array<double, 2>>& getMeasure() const;
     // setter
     void setName(const std::string&);
     void setSensorType(const std::string&);
@@ -81,9 +81,9 @@ class AbstractSensor {
     void setLongDescription(const std::string&);
     void setXAxisLabel(const std::string&);
     void setSimulationSpan(unsigned int);
-    void setMaxMeasurable(float);
-    void setMinMeasurable(float);
-    void setSensibility(float);
+    void setMaxMeasurable(double);
+    void setMinMeasurable(double);
+    void setSensibility(double);
 };
 }
 

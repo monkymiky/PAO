@@ -18,8 +18,8 @@ public:
     void removeSensor(AbstractSensor* sensor);
     void cleanSensors();
     void addSensors(const std::vector<AbstractSensor*>& sensors);
-    void addObserver(ObserverInterface* observer);
-    void notifyAllObservers() const ;
+    //void addObserver(ObserverInterface* observer);
+    //void notifyAllObservers() const ;
     const std::vector<AbstractSensor*>& getSensors() const;
 };
 }

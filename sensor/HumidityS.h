@@ -7,13 +7,13 @@ namespace Sensor{
 
 class HumidityNTCS : public AbstractSensor{
     private:
-    float a;
-    float b;
-    float c;
-    std::vector<float> interpolationTable;
+    double a;
+    double b;
+    double c;
+    std::vector<double> interpolationTable;
     void createInterpolationTable();
     protected:
-    float trasmute(float rawMeasure) const override;
+    double trasmute(double rawMeasure) const override;
 
     public:
     ~HumidityNTCS();
@@ -23,23 +23,23 @@ class HumidityNTCS : public AbstractSensor{
                     const  std::string longDesc,
                     const  std::string xAxisLabel,
                     const  unsigned int simulationSpan,
-                    const  float sensibility,
-                    const  float maxMeasurable,
-                    const  float minMeasurable,
-                    const float a,
-                    const float b,
-                    const float c);
+                    const  double sensibility,
+                    const  double maxMeasurable,
+                    const  double minMeasurable,
+                    const double a,
+                    const double b,
+                    const double c);
     
     void accept(VisitorInterface& visitor) override;
 
-    float getA() const;
-    float getB() const;
-    float getC() const;
+    double getA() const;
+    double getB() const;
+    double getC() const;
    
 
-    void setA( float) ;
-    void setB( float) ;
-    void setC( float) ;
+    void setA( double) ;
+    void setB( double) ;
+    void setC( double) ;
     
 };
 

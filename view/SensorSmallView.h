@@ -6,15 +6,20 @@
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
 #include <QtWidgets/QFrame>
-#include "MainSensorView.h"
+#include "MainWindow.h"
+
+
 
 namespace Sensor {
 namespace View {
+
+class MainWindow;
 
 class SmallSensorView: public QFrame, public ObserverInterface {
     Q_OBJECT
   private:
     AbstractSensor& sensor;
+    MainWindow& mainWindow;
     QLabel* name_label;
     QLabel* sensor_type_label;
     QLabel* short_description_label;
@@ -22,9 +27,11 @@ class SmallSensorView: public QFrame, public ObserverInterface {
     void mousePressEvent(QMouseEvent *event) override;
 
   public:
-    SmallSensorView(AbstractSensor& sensor, MainSensorView& main, QWidget* parent = nullptr);
+    SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow);
+    ~SmallSensorView();
     void show();
     void update(AbstractSensor* sensor) override;
+    void endObservation() ;
     const AbstractSensor* getSensor() const;
 
   signals:

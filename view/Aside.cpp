@@ -1,55 +1,26 @@
 #include "Aside.h"
 #include "SensorDialog.h"
 #include <iostream>
+#include <QFileDialog>
+#include "../sensor/JsonPharser.h"
 
 
 namespace Sensor {
 namespace View {
-void Aside::addNewSensorClicked(){
-    SensorDialog* typeDialog = new SensorDialog( manager, qobject_cast<QWidget*>(parent()));
-    typeDialog->exec();
-};
 
- Aside::Aside(SensorManager& manager,MainSensorView& main, QWidget* parent)
- : QWidget(parent),
- manager(manager),
- sensorSViewList(std::vector<SmallSensorView*>() ),  
- sensorScrollFrame(new QFrame(this)),
- SensorListLayout(new QVBoxLayout(sensorScrollFrame)),
- main(main)
+ Aside::Aside(QWidget* parent):
+    QWidget(parent),
+    smallSViewList(std::list<SmallSensorView*>() ),  
+    sensorScrollFrame(new QFrame(this)),
+    
+    SensorListLayout(new QVBoxLayout(sensorScrollFrame))
 {
-    manager.addObserver(this);
-    this->setFixedWidth(300);
+    
 
     QVBoxLayout* AsideLayout = new QVBoxLayout(this);
-    
-    QFrame* topFrame = new QFrame();
-    QHBoxLayout* topFrameLayout = new QHBoxLayout(topFrame);
-    topFrame->setLayout(topFrameLayout);
-    QPushButton *buttonSave = new QPushButton("Salva", topFrame);
-    QPushButton *buttonOpen = new QPushButton("Apri", topFrame); 
-    QPushButton *buttonClose = new QPushButton("Chiudi", topFrame);
-
-
-    connect(buttonSave, SIGNAL(clicked()), &parent, SLOT(saveSensors()));
-    connect(buttonOpen, SIGNAL(clicked()), &parent, SLOT(openSensorFile()));
-    connect(buttonClose, SIGNAL(clicked()), &parent, SLOT(closeSensors()));
-
-
-    topFrameLayout->addWidget(buttonSave);
-    topFrameLayout->addWidget(buttonOpen); 
-    topFrameLayout->addWidget(buttonClose);
-    topFrameLayout->addStretch();
-    AsideLayout->addWidget(topFrame);
 
     SensorListLayout->setAlignment(Qt::AlignTop);
-    for(auto sensor : manager.getSensors()){
-        SmallSensorView* sensorSmallV = new SmallSensorView(*sensor, main, sensorScrollFrame);
-        sensorSViewList.push_back(sensorSmallV);
-        sensorSmallV->show();
-        SensorListLayout->addWidget(sensorSmallV);
-        sensor->addObserver(sensorSmallV);
-    }
+    
     AsideLayout->addWidget(sensorScrollFrame);
 
     QScrollArea* SensorScrollArea = new QScrollArea(this);
@@ -57,52 +28,33 @@ void Aside::addNewSensorClicked(){
     SensorScrollArea->setWidgetResizable(true);
     SensorScrollArea->setWidget(sensorScrollFrame);
     AsideLayout->addWidget(SensorScrollArea);
+}
 
-    QPushButton *buttonAdd = new QPushButton("Aggiungi sensore", this);
-    connect(buttonAdd, SIGNAL(clicked()), this, SLOT(addNewSensorClicked()));
-    AsideLayout->addWidget(buttonAdd);
+void Aside::clearSSVList() {
+    for(auto sensor : smallSViewList){
+        delete sensor;
+    }
+    smallSViewList.clear();
 };
 
-void Aside::show(){
-    for(auto sensorView : sensorSViewList){
-        sensorView->show();
-    }
-};
-
-void Aside::update(AbstractSensor* sensor) {
-    if (manager.getSensors().size() == sensorSViewList.size() +1){
-        AbstractSensor* sensor = manager.getSensors().back();
-        SmallSensorView* sensorSmallV = new SmallSensorView(*sensor, main, sensorScrollFrame);
-        sensorSViewList.push_back(sensorSmallV);
-        sensorSmallV->show();
-        SensorListLayout->addWidget(sensorSmallV);
-        sensor->addObserver(sensorSmallV);
-    }
-    else if(manager.getSensors().size() == sensorSViewList.size() -1){
-        for(auto sensorSView : sensorSViewList){
-            if(sensorSView->getSensor() == sensor){
-                sensorSViewList.erase(std::remove(sensorSViewList.begin(), sensorSViewList.end(), sensorSView), sensorSViewList.end());
-                SensorListLayout->removeWidget(sensorSView);
-                sensorSView->deleteLater();
-                break;
-            }
-        }
-    }
-    else{
-        for (auto sensorSView : sensorSViewList){
-            delete sensorSView;
-        }
-        sensorSViewList.clear();
-        for(auto sensor : manager.getSensors()){
-            SmallSensorView* sensorSmallV = new SmallSensorView(*sensor, main, sensorScrollFrame);
-            sensorSViewList.push_back(sensorSmallV);
-            sensorSmallV->show();
-            SensorListLayout->addWidget(sensorSmallV);
-            sensor->addObserver(sensorSmallV);
+void Aside::deleteSSV(AbstractSensor* sensor) {
+    auto it = smallSViewList.begin();
+    while (it != smallSViewList.end()) {
+        if ((*it)->getSensor() == sensor) {
+            delete *it;
+            smallSViewList.erase(it);
+            break;
+        } else {
+            ++it;
         }
     }
 };
-    
+
+void Aside::addSSV(SmallSensorView* ssv) {
+    smallSViewList.push_back(ssv);
+    SensorListLayout->addWidget(ssv);
+    ssv->show();
+};
 
 }
 }

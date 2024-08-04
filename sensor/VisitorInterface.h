@@ -12,9 +12,9 @@ class HumidityNTCS;
 class VisitorInterface {
   public:
     virtual ~VisitorInterface() {};
-    virtual void visitTemperaturePRTS(TemperaturePRTS& TemperaturePRT) = 0;
-    virtual void visitHumidityNTCS(HumidityNTCS& Humidity) = 0;
-    virtual void visitDust25S(Dust25S& Dust25) = 0;
+    virtual void visitTemperaturePRTS(const TemperaturePRTS& TemperaturePRT) = 0;
+    virtual void visitHumidityNTCS(const HumidityNTCS& Humidity) = 0;
+    virtual void visitDust25S(const Dust25S& Dust25) = 0;
 };
 }
 

@@ -1,6 +1,12 @@
+#ifndef JSON_VISITOR_H
+#define JSON_VISITOR_H
+
+
 #include "VisitorInterface.h"
 #include <QJsonObject>
-
+#include "../sensor/TemperatureS.h"
+#include "../sensor/HumidityS.h"
+#include "../sensor/Dust25S.h"
 
 namespace Sensor {
 
@@ -15,3 +21,4 @@ namespace Sensor {
     };
 
 }
+#endif
