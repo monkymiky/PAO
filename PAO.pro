@@ -20,7 +20,9 @@ HEADERS += sensor/AbstractSensor.h \
            view/SensorDialog.h \
            view/SensorSmallView.h \
            view/TableButtonItem.h \
-           view/ModifySensorVisitor.h
+           view/ModifySensorVisitor.h \
+           sensor/JsonPharser.h \
+           sensor/JsonVisitor.h
 SOURCES += main.cpp \
            sensor/AbstractSensor.cpp \
            sensor/Dust25S.cpp \
@@ -32,7 +34,8 @@ SOURCES += main.cpp \
            view/MainWindow.cpp \
            view/SensorDialog.cpp \
            view/SensorSmallView.cpp \
-           view/ModifySensorVisitor.cpp
+           view/ModifySensorVisitor.cpp \
+           sensor/JsonVisitor.cpp
 
 
 

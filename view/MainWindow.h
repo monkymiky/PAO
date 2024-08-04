@@ -21,6 +21,9 @@ class MainWindow : public QMainWindow {
     MainWindow(Aside& aside,MainSensorView& main,SensorManager& manager, QWidget *parent = nullptr);
     private slots:
     void changeMain(AbstractSensor* sensor);
+    void saveSensors();
+    void openSensorFile();
+    void closeSensors();
 };
 
 } 

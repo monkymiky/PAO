@@ -19,6 +19,7 @@ void Aside::addNewSensorClicked(){
  main(main)
 {
     manager.addObserver(this);
+    this->setFixedWidth(300);
 
     QVBoxLayout* AsideLayout = new QVBoxLayout(this);
     
@@ -28,6 +29,13 @@ void Aside::addNewSensorClicked(){
     QPushButton *buttonSave = new QPushButton("Salva", topFrame);
     QPushButton *buttonOpen = new QPushButton("Apri", topFrame); 
     QPushButton *buttonClose = new QPushButton("Chiudi", topFrame);
+
+
+    connect(buttonSave, SIGNAL(clicked()), &parent, SLOT(saveSensors()));
+    connect(buttonOpen, SIGNAL(clicked()), &parent, SLOT(openSensorFile()));
+    connect(buttonClose, SIGNAL(clicked()), &parent, SLOT(closeSensors()));
+
+
     topFrameLayout->addWidget(buttonSave);
     topFrameLayout->addWidget(buttonOpen); 
     topFrameLayout->addWidget(buttonClose);
@@ -50,7 +58,7 @@ void Aside::addNewSensorClicked(){
     SensorScrollArea->setWidget(sensorScrollFrame);
     AsideLayout->addWidget(SensorScrollArea);
 
-    QPushButton *buttonAdd = new QPushButton("Aggiungi", this);
+    QPushButton *buttonAdd = new QPushButton("Aggiungi sensore", this);
     connect(buttonAdd, SIGNAL(clicked()), this, SLOT(addNewSensorClicked()));
     AsideLayout->addWidget(buttonAdd);
 };
