@@ -24,6 +24,10 @@ SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow)
     layout->addWidget(sensor_type_label);
     layout->addWidget(short_description_label);
 
+    name_label->setText(QString::fromStdString(sensor.getName()));
+    sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor.getSensorType()));
+    short_description_label->setText(QString::fromStdString(sensor.getShortDescription()));
+
     connect(this, SIGNAL(clickedWithSensor(AbstractSensor*)), &mainWindow, SLOT(changeCurrentSensor(AbstractSensor*))); 
     sensor.addObserver(this);
 }
@@ -32,11 +36,7 @@ SmallSensorView::~SmallSensorView(){
     sensor.removeObserver(this);
 };
 
-void SmallSensorView::show() {
-    name_label->setText(QString::fromStdString(sensor.getName()));
-    sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor.getSensorType()));
-    short_description_label->setText(QString::fromStdString(sensor.getShortDescription()));
-}
+
 
 void SmallSensorView::update(AbstractSensor* sensor) {
     if(sensor != nullptr){

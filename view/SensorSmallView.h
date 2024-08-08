@@ -29,7 +29,6 @@ class SmallSensorView: public QFrame, public ObserverInterface {
   public:
     SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow);
     ~SmallSensorView();
-    void show();
     void update(AbstractSensor* sensor) override;
     void endObservation() ;
     const AbstractSensor* getSensor() const;

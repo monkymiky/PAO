@@ -15,6 +15,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLineEdit>
 
 
 
@@ -30,11 +31,15 @@ class Aside: public QWidget {
     std::list<SmallSensorView*> smallSViewList;
     QFrame* sensorScrollFrame;
     QVBoxLayout* SensorListLayout; 
+    QLineEdit* search;
   public:
     Aside(QWidget* parent = nullptr);
     void clearSSVList();
     void deleteSSV(AbstractSensor* sensor);
     void addSSV(SmallSensorView* ssv);
+
+  private slots:
+    void searchSSV();
 
   
 };

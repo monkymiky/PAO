@@ -38,7 +38,9 @@ SOURCES += main.cpp \
            sensor/JsonVisitor.cpp \
            sensor/JsonPharser.cpp
 
-
+RESOURCES += \
+            assets/icons/lens.svg \
+            assets/icons/lens.png
 
 
 

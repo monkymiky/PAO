@@ -12,15 +12,21 @@ namespace View {
     QWidget(parent),
     smallSViewList(std::list<SmallSensorView*>() ),  
     sensorScrollFrame(new QFrame(this)),
-    
-    SensorListLayout(new QVBoxLayout(sensorScrollFrame))
+    SensorListLayout(new QVBoxLayout(sensorScrollFrame)),
+    search(new QLineEdit(this))
 {
-    
-
     QVBoxLayout* AsideLayout = new QVBoxLayout(this);
 
+    QFrame* searchFrame = new  QFrame(this);
+    QHBoxLayout * searchFrameLayout = new QHBoxLayout(searchFrame);
+    QPushButton* lens = new QPushButton("cerca",searchFrame);
+    searchFrameLayout->addWidget(search);
+    searchFrameLayout->addWidget(lens);
+    connect(lens, SIGNAL(clicked()), this, SLOT(searchSSV()));
+
+    AsideLayout->addWidget(searchFrame);
+
     SensorListLayout->setAlignment(Qt::AlignTop);
-    
     AsideLayout->addWidget(sensorScrollFrame);
 
     QScrollArea* SensorScrollArea = new QScrollArea(this);
@@ -56,5 +62,25 @@ void Aside::addSSV(SmallSensorView* ssv) {
     ssv->show();
 };
 
+
+void Aside::searchSSV(){
+    std::string searched = search->text().toStdString();
+    searched = searched.substr(0, searched.find_last_not_of(" ") + 1);
+    searched = searched.substr(searched.find_first_not_of(" "));
+    if(searched == std::string::npos){
+        for(auto& ssv : smallSViewList){
+            ssv->show();
+        }
+    }else{
+        for(auto& ssv : smallSViewList){
+            std::string title = ssv->getSensor()->getName();
+            if(title.find(searched) != std::string::npos){
+                ssv->show();
+            }else{
+                ssv->hide();
+            }
+        }
+    }
+}
 }
 }
