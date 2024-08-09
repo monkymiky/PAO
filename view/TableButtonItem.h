@@ -11,7 +11,8 @@ class TableButtonItem : public QPushButton, public QTableWidgetItem {
     private:
         int index;
     public:
-        TableButtonItem(const QString& text,int index, QWidget* parent = nullptr): QPushButton(text, parent), QTableWidgetItem(text), index(index){};
+        TableButtonItem(const QString& text,int index, QWidget* parent = nullptr)
+        : QPushButton(text, parent), QTableWidgetItem(text), index(index){};
         int getIndex() const {return index;};
         void setIndex(int index){this->index = index;};  
 };

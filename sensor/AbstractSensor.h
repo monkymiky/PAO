@@ -1,6 +1,7 @@
 #ifndef ABSTRACTSENSOR_H
 #define ABSTRACTSENSOR_H
 
+#include <vld.h>
 #include <string>
 #include <vector>
 #include <array>

@@ -67,7 +67,7 @@ void Aside::searchSSV(){
     std::string searched = search->text().toStdString();
     searched = searched.substr(0, searched.find_last_not_of(" ") + 1);
     searched = searched.substr(searched.find_first_not_of(" "));
-    if(searched == std::string::npos){
+    if(searched == ""){
         for(auto& ssv : smallSViewList){
             ssv->show();
         }

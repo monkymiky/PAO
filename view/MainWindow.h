@@ -22,7 +22,10 @@ class MainWindow : public QMainWindow {
     AbstractSensor* currentSensor;
     public:
     ~MainWindow() override;
-    MainWindow(SensorManager& manager, Aside& aside , MainSensorView& main,QWidget *parent = nullptr );
+    MainWindow( SensorManager& manager, 
+                Aside& aside , 
+                MainSensorView& main,
+                QWidget *parent = nullptr );
     void addNewSensor(AbstractSensor* sensor);
  
     private slots:

@@ -34,6 +34,8 @@ class MainSensorView: public QWidget, public ObserverInterface {
     QChart *chart;
     QChartView* chartView;
     QLabel *longDesc;
+
+    void drawChart();
   public:
     MainSensorView(AbstractSensor* sensor, QWidget* parent = nullptr);
     MainSensorView( QWidget* parent = nullptr);

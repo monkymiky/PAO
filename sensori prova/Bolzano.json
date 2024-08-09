@@ -1,0 +1,51 @@
+{
+    "sensors": [
+        {
+            "R0": "500",
+            "alpha": "0.05",
+            "beta": "3435",
+            "delta": "1",
+            "epsilon": "1",
+            "gamma": "2e-07",
+            "longDesc": "Temperatura campionata giornamlmente alle ore 15 della città di Bolzano. la posizione esatta del sensore è : 46.501870, 11.339721 . Attivo dal 3 agosto 2024.",
+            "maxMeasurable": "100",
+            "measure": [
+                [
+                    35,
+                    0
+                ],
+                [
+                    33,
+                    1
+                ],
+                [
+                    37,
+                    2
+                ],
+                [
+                    36,
+                    3
+                ],
+                [
+                    31,
+                    4
+                ],
+                [
+                    34,
+                    5
+                ],
+                [
+                    38,
+                    6
+                ]
+            ],
+            "minMeasurable": "-30",
+            "name": "Bolzano Piazza Mazzini",
+            "sensibility": "1",
+            "shortDesc": "città di bolzano in centro",
+            "simulationSpan": "1",
+            "xAxisLabel": "Giorni",
+            "zeta": "1"
+        }
+    ]
+}

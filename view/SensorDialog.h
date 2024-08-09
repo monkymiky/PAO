@@ -39,7 +39,7 @@ class SensorDialog: public QDialog {
     QTextEdit  longDescTE;
     QLineEdit  sensibilityLE;
     QLineEdit  spanSimulLE;
-    QComboBox * typeCB;
+    QComboBox* typeCB;
     QLineEdit  maxLE;
     QLineEdit  minLE;
     

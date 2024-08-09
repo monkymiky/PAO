@@ -38,8 +38,11 @@ SOURCES += main.cpp \
            sensor/JsonVisitor.cpp \
            sensor/JsonPharser.cpp
 
+RESOURCES += \
+            assets/icons/lens.svg \
+            assets/icons/lens.png
 
-
+INCLUDEPATH += "C:/Program Files (x86)/Visual Leak Detector/include/" LIBS      += -L"C:/Program Files (x86)/Visual Leak Detector/lib/Win64"
 
 
 # Default rules for deployment.

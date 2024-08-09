@@ -126,9 +126,15 @@ void MainWindow::closeSensors(){
 };
 
 void MainWindow::simulate(){
+    if(currentSensor == nullptr){
+        return;
+    }
     currentSensor->simulate();
 }
 void MainWindow::modify() {
+    if(currentSensor == nullptr){
+        return;
+    }
     SensorDialog* typeDialog = new SensorDialog( *this ,currentSensor);
     typeDialog->exec();
 };
