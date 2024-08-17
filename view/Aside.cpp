@@ -9,8 +9,7 @@ namespace Sensor {
 namespace View {
 
  Aside::Aside(QWidget* parent):
-    QWidget(parent),
-    smallSViewList(std::list<SmallSensorView*>() ),  
+    QWidget(parent),  
     sensorOutFrame(new QFrame(this)),
     sensorsLayout(new QVBoxLayout(sensorOutFrame)),
     search(new QLineEdit(this))

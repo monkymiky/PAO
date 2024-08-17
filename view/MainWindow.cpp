@@ -83,8 +83,12 @@ void MainWindow::buttonAddClicked(){
 
 void MainWindow::deleteSensor(){
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Elimina Sensore", "Tutte le modifiche non salvate andranno perse. Sei sicuro di voler eliminare il sensore?",
-                                  QMessageBox::Yes | QMessageBox::No);
+    reply = QMessageBox::question(
+        this, 
+        "Elimina Sensore", 
+        "Tutte le modifiche non salvate andranno perse. Sei sicuro di voler eliminare il sensore?",
+        QMessageBox::Yes | QMessageBox::No
+        );
     if (reply == QMessageBox::No) {
         return; 
     }
@@ -95,7 +99,8 @@ void MainWindow::deleteSensor(){
 };
 
 void MainWindow::saveSensors(){
-    QString filename = QFileDialog::getSaveFileName(this, "Save sensors", QDir::homePath(), "Json files (*.json)");
+    QString filename = QFileDialog::getSaveFileName(
+        this, "Save sensors", QDir::homePath(), "Json files (*.json)");
     if(filename.isEmpty()){
         return;
     }
@@ -103,7 +108,8 @@ void MainWindow::saveSensors(){
 };
 
 void MainWindow::openSensorFile(){
-    QString filename = QFileDialog::getOpenFileName(this, "Open sensors", QDir::homePath(), "Json files (*.json)");
+    QString filename = QFileDialog::getOpenFileName(
+        this, "Open sensors", QDir::homePath(), "Json files (*.json)");
     if(filename.isEmpty()){
         return;
     }
@@ -113,8 +119,12 @@ void MainWindow::openSensorFile(){
 void MainWindow::closeSensors(){
 
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Chiudi Sensori", "Tutte le modifiche non salvate andranno perse, compresi tutti i sensori aggiunti dopo l'ultimo salvataggio.  Sei sicuro di voler chiudere il file ?",
-                                  QMessageBox::Yes | QMessageBox::No);
+    reply = QMessageBox::question(
+        this, 
+        "Chiudi Sensori", 
+        "Tutte le modifiche non salvate andranno perse, compresi tutti i sensori aggiunti 
+        dopo l'ultimo salvataggio.  Sei sicuro di voler chiudere il file ?",
+        QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::No) {
         return; 
     }

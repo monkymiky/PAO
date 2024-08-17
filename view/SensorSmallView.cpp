@@ -10,11 +10,13 @@
 namespace Sensor {
 namespace View {
 
-SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow)
-    : QFrame(&mainWindow),
+SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow):
+    QFrame(&mainWindow),
     sensor(sensor) ,
     mainWindow(mainWindow),
-    title(new QLabel()), sensorType(new QLabel()), short_description(new QLabel())
+    title(new QLabel(this)),
+    sensorType(new QLabel(this)),
+    short_description(new QLabel(this))
 {   
     setFrameShape(QFrame::StyledPanel);
     setMaximumSize(99999, 100);

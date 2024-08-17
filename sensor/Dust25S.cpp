@@ -33,11 +33,11 @@ double Dust25S::getB() const {return b;};
 // setter
 void Dust25S::setA( double A){ 
     a=A ;
-notifyAllObservers(this);
+    notifyAllObservers(this);
 }; 
 void Dust25S::setB( double B){ 
     b=B ;
-notifyAllObservers(this);
+    notifyAllObservers(this);
 }; 
 
 

@@ -3,7 +3,9 @@
 namespace Sensor {
     namespace View {
 
-        void ModifySensorVisitor::addDataField(QString label, QString label2, QFrame* parentFrame, QVBoxLayout* layout){
+        void ModifySensorVisitor::addDataField(
+            QString label, QString label2, QFrame* parentFrame, QVBoxLayout* layout
+            ){
             QFrame* Frame = new QFrame(parentFrame);
             QHBoxLayout *frameLayout = new QHBoxLayout(Frame);
             QLabel *Lab = new QLabel(label,Frame);

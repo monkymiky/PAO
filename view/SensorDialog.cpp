@@ -27,7 +27,6 @@ void SensorDialog::addFrame(QString label, QWidget & widget, QLayout& layout){
 SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
     : mainWindow(mainWindow),
     sensor(sensor),
-    sensorSpecificField(),
     QDialog(&mainWindow),
     titleLE(QLineEdit(this)),
     shortDescLE(QLineEdit(this)),
@@ -257,7 +256,10 @@ void SensorDialog::saveSensor(){
                 return;
             }
 
-            sensor = new TemperaturePRTS(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,r0,alpha,beta,gamma,delta,epsilon,zeta);
+            sensor = new TemperaturePRTS(
+                title,shortDescription,longDescription,xAxisLabel,simulationSpan,
+                sensibility,maxMeasurable,minMeasurable,r0,alpha,beta,gamma,delta,
+                epsilon,zeta);
         }else if (sw == 1){
             double Ah = humidA.text().toDouble();
             double Bh = humidB.text().toDouble();
@@ -268,7 +270,11 @@ void SensorDialog::saveSensor(){
                 return;
             }
 
-            sensor = new HumidityNTCS(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ah,Bh,Ch);
+            sensor = new HumidityNTCS(
+                title,shortDescription,longDescription,
+                xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,
+                Ah,Bh,Ch
+            );
         }else if(sw == 2){
             double Ad = dustA.text().toDouble();
             double Bd = dustB.text().toDouble();
@@ -278,7 +284,9 @@ void SensorDialog::saveSensor(){
                 return;
             }
                 
-            sensor = new Dust25S(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ad,Bd);
+            sensor = new Dust25S(
+                title,shortDescription,longDescription,xAxisLabel,simulationSpan,
+                sensibility,maxMeasurable,minMeasurable,Ad,Bd);
         }else {
             std::cerr << "Unexpected sensor type selected in SensorDialog::save()";
         }
@@ -323,7 +331,6 @@ void SensorDialog::saveSensor(){
             }
         }
         else if(sw == 2){
-
             double Ad = sensorSpecificField["A"]->text().toDouble();
             double Bd = sensorSpecificField["B"]->text().toDouble();
             if(auto dustSensor = dynamic_cast<Dust25S*>(sensor)){

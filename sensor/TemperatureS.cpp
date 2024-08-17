@@ -53,7 +53,9 @@ double TemperaturePRTS::trasmute(double resistance) const  {
     return interpolatedTemperature;
 };
 
-TemperaturePRTS::TemperaturePRTS(): AbstractSensor("", "Resistenza PRT", "", "", "","Temperatura [C°]", 0, 0, 0, 0 ),R0(0), alpha(0), beta(0), gamma(0), delta(0), epsilon(0), zeta(0), interpolationTable(std::vector<double>()){};
+TemperaturePRTS::TemperaturePRTS(): 
+    AbstractSensor("", "Resistenza PRT", "", "", "","Temperatura [C°]", 0, 0, 0, 0 ),
+                    R0(0), alpha(0), beta(0), gamma(0), delta(0), epsilon(0), zeta(0){};
 
 TemperaturePRTS::TemperaturePRTS(   const std::string name, 
                                     const  std::string shortDesc,
@@ -70,8 +72,10 @@ TemperaturePRTS::TemperaturePRTS(   const std::string name,
                                     const double delta = 1.27e-10,
                                     const double epsilon = -1.76e-13,
                                     const double zeta =  2.04e-16) 
-                                    : AbstractSensor(name, "Resistenza PRT", shortDesc, longDesc, xAxisLabel,"Temperatura [C°]", simulationSpan, sensibility, maxMeasurable, minMeasurable ),
-                                    R0(R0), alpha(alpha), beta(beta), gamma(gamma), delta(delta), epsilon(epsilon), zeta(zeta), interpolationTable(std::vector<double>())
+                                    : AbstractSensor(
+                                        name, "Resistenza PRT", shortDesc, longDesc, xAxisLabel,"Temperatura [C°]",
+                                        simulationSpan, sensibility, maxMeasurable, minMeasurable ),
+                                    R0(R0), alpha(alpha), beta(beta), gamma(gamma), delta(delta), epsilon(epsilon), zeta(zeta)
                                     {
                                         createInterpolationTable();
                                     };

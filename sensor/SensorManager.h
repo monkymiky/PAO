@@ -11,7 +11,6 @@ private:
     std::vector<ObserverInterface*> observers;
 
 public:
-    SensorManager();
     ~SensorManager();
 
     void addSensor(AbstractSensor* sensor);
