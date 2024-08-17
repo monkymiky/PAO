@@ -15,7 +15,7 @@ HEADERS += sensor/AbstractSensor.h \
            sensor/TemperatureS.h \
            sensor/VisitorInterface.h \
            view/Aside.h \
-           view/MainSensorView.h \
+           view/SensorView.h \
            view/MainWindow.h \
            view/SensorDialog.h \
            view/SensorSmallView.h \
@@ -30,7 +30,7 @@ SOURCES += main.cpp \
            sensor/SensorManager.cpp \
            sensor/TemperatureS.cpp \
            view/Aside.cpp \
-           view/MainSensorView.cpp \
+           view/SensorView.cpp \
            view/MainWindow.cpp \
            view/SensorDialog.cpp \
            view/SensorSmallView.cpp \

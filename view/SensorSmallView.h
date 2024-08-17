@@ -20,9 +20,9 @@ class SmallSensorView: public QFrame, public ObserverInterface {
   private:
     AbstractSensor& sensor;
     MainWindow& mainWindow;
-    QLabel* name_label;
-    QLabel* sensor_type_label;
-    QLabel* short_description_label;
+    QLabel* title;
+    QLabel* sensorType;
+    QLabel* short_description;
   protected:
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -30,7 +30,6 @@ class SmallSensorView: public QFrame, public ObserverInterface {
     SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow);
     ~SmallSensorView();
     void update(AbstractSensor* sensor) override;
-    void endObservation() ;
     const AbstractSensor* getSensor() const;
 
   signals:

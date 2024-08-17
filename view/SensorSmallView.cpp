@@ -14,19 +14,19 @@ SmallSensorView::SmallSensorView(AbstractSensor& sensor, MainWindow& mainWindow)
     : QFrame(&mainWindow),
     sensor(sensor) ,
     mainWindow(mainWindow),
-    name_label(new QLabel()), sensor_type_label(new QLabel()), short_description_label(new QLabel())
+    title(new QLabel()), sensorType(new QLabel()), short_description(new QLabel())
 {   
     setFrameShape(QFrame::StyledPanel);
     setMaximumSize(99999, 100);
     QVBoxLayout* layout = new QVBoxLayout(this);
     
-    layout->addWidget(name_label);
-    layout->addWidget(sensor_type_label);
-    layout->addWidget(short_description_label);
+    layout->addWidget(title);
+    layout->addWidget(sensorType);
+    layout->addWidget(short_description);
 
-    name_label->setText(QString::fromStdString(sensor.getName()));
-    sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor.getSensorType()));
-    short_description_label->setText(QString::fromStdString(sensor.getShortDescription()));
+    title->setText(QString::fromStdString(sensor.getTitle()));
+    sensorType->setText("Sensore: " + QString::fromStdString(sensor.getSensorType()));
+    short_description->setText(QString::fromStdString(sensor.getShortDescription()));
 
     connect(this, SIGNAL(clickedWithSensor(AbstractSensor*)), &mainWindow, SLOT(changeCurrentSensor(AbstractSensor*))); 
     sensor.addObserver(this);
@@ -40,16 +40,13 @@ SmallSensorView::~SmallSensorView(){
 
 void SmallSensorView::update(AbstractSensor* sensor) {
     if(sensor != nullptr){
-        name_label->setText(QString::fromStdString(sensor->getName()));
-        sensor_type_label->setText("Sensore: " + QString::fromStdString(sensor->getSensorType()));
-        short_description_label->setText(QString::fromStdString(sensor->getShortDescription()));
+        title->setText(QString::fromStdString(sensor->getTitle()));
+        sensorType->setText("Sensore: " + QString::fromStdString(sensor->getSensorType()));
+        short_description->setText(QString::fromStdString(sensor->getShortDescription()));
     }else{
         std::cerr << "Sensor is nullptr in SmallSensorView::update" << std::endl;
     }
 }
- void SmallSensorView::endObservation() {
-        sensor.removeObserver(this);
- }
 
 const AbstractSensor* SmallSensorView::getSensor() const
 {

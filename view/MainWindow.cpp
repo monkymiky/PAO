@@ -6,12 +6,11 @@
 #include <QMessageBox>
 
 namespace Sensor
-{
-namespace View
+{namespace View
 {
     
-MainWindow::MainWindow( SensorManager& manager,Aside& aside , MainSensorView& main, QWidget *parent  )
-: QMainWindow(parent),  manager(manager) ,aside(aside) ,main(main){
+MainWindow::MainWindow( SensorManager& manager,Aside& aside , SensorView& sensorView, QWidget *parent  )
+: QMainWindow(parent),  manager(manager) ,aside(aside) ,sensorView(sensorView){
     QWidget* centralWidget = new QWidget(this);
     QVBoxLayout* mainWindowLayout = new QVBoxLayout(centralWidget);
 
@@ -54,23 +53,23 @@ MainWindow::MainWindow( SensorManager& manager,Aside& aside , MainSensorView& ma
     connect(buttonAdd, SIGNAL(clicked()), this, SLOT(buttonAddClicked()));
     middleFrameLayout->addWidget(asideFrame);
 
-    middleFrameLayout->addWidget(&main);
+    middleFrameLayout->addWidget(&sensorView);
     setCentralWidget(centralWidget);
     show();
 };
 
 MainWindow::~MainWindow() {
     delete &aside;
-    delete &main;
+    delete &sensorView;
     delete &manager;
 };
 
 void MainWindow::changeCurrentSensor(AbstractSensor* sensor){
-    main.changeSensor(sensor);
+    sensorView.changeSensor(sensor);
     currentSensor = sensor;
 };
 
-void MainWindow::addNewSensor(AbstractSensor* sensor){
+void MainWindow::addSensor(AbstractSensor* sensor){
     manager.addSensor(sensor);
     aside.addSSV(new SmallSensorView(*sensor, *this));
     changeCurrentSensor(sensor);
@@ -91,7 +90,7 @@ void MainWindow::deleteSensor(){
     }
     manager.removeSensor(currentSensor);
     aside.deleteSSV(currentSensor);
-    main.changeSensor(nullptr);
+    sensorView.changeSensor(nullptr);
     changeCurrentSensor(nullptr);
 };
 
@@ -121,8 +120,8 @@ void MainWindow::closeSensors(){
     }
 
     manager.cleanSensors();
-    aside.clearSSVList();
-    main.changeSensor(nullptr);
+    aside.clearAllSSV();
+    sensorView.changeSensor(nullptr);
 };
 
 void MainWindow::simulate(){

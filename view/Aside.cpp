@@ -11,8 +11,8 @@ namespace View {
  Aside::Aside(QWidget* parent):
     QWidget(parent),
     smallSViewList(std::list<SmallSensorView*>() ),  
-    sensorScrollFrame(new QFrame(this)),
-    SensorListLayout(new QVBoxLayout(sensorScrollFrame)),
+    sensorOutFrame(new QFrame(this)),
+    sensorsLayout(new QVBoxLayout(sensorOutFrame)),
     search(new QLineEdit(this))
 {
     QVBoxLayout* AsideLayout = new QVBoxLayout(this);
@@ -26,17 +26,17 @@ namespace View {
 
     AsideLayout->addWidget(searchFrame);
 
-    SensorListLayout->setAlignment(Qt::AlignTop);
-    AsideLayout->addWidget(sensorScrollFrame);
+    sensorsLayout->setAlignment(Qt::AlignTop);
+    AsideLayout->addWidget(sensorOutFrame);
 
     QScrollArea* SensorScrollArea = new QScrollArea(this);
     SensorScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     SensorScrollArea->setWidgetResizable(true);
-    SensorScrollArea->setWidget(sensorScrollFrame);
+    SensorScrollArea->setWidget(sensorOutFrame);
     AsideLayout->addWidget(SensorScrollArea);
 }
 
-void Aside::clearSSVList() {
+void Aside::clearAllSSV() {
     for(auto sensor : smallSViewList){
         delete sensor;
     }
@@ -58,7 +58,7 @@ void Aside::deleteSSV(AbstractSensor* sensor) {
 
 void Aside::addSSV(SmallSensorView* ssv) {
     smallSViewList.push_back(ssv);
-    SensorListLayout->addWidget(ssv);
+    sensorsLayout->addWidget(ssv);
     ssv->show();
 };
 

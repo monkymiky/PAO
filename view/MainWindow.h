@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "Aside.h"
-#include "MainSensorView.h"
+#include "SensorView.h"
 #include "../sensor/SensorManager.h"
 #include "../sensor/AbstractSensor.h"
 
@@ -17,16 +17,16 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
     private:
     Aside& aside;
-    MainSensorView& main;
+    SensorView& sensorView;
     SensorManager& manager;
     AbstractSensor* currentSensor;
     public:
     ~MainWindow() override;
     MainWindow( SensorManager& manager, 
                 Aside& aside , 
-                MainSensorView& main,
+                SensorView& sensorView,
                 QWidget *parent = nullptr );
-    void addNewSensor(AbstractSensor* sensor);
+    void addSensor(AbstractSensor* sensor);
  
     private slots:
     void changeCurrentSensor(AbstractSensor* sensor);

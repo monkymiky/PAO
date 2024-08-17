@@ -1,5 +1,5 @@
-#ifndef MAINSENSORVIEW_H
-#define MAINSENSORVIEW_H
+#ifndef SENSORVIEW_H
+#define SENSORVIEW_H
 
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
@@ -19,7 +19,7 @@
 namespace Sensor {
 namespace View {
 
-class MainSensorView: public QWidget, public ObserverInterface {
+class SensorView: public QWidget, public ObserverInterface {
     Q_OBJECT
   private:
     AbstractSensor* sensor;
@@ -37,9 +37,9 @@ class MainSensorView: public QWidget, public ObserverInterface {
 
     void drawChart();
   public:
-    MainSensorView(AbstractSensor* sensor, QWidget* parent = nullptr);
-    MainSensorView( QWidget* parent = nullptr);
-    ~MainSensorView();
+    SensorView(AbstractSensor* sensor, QWidget* parent = nullptr);
+    SensorView( QWidget* parent = nullptr);
+    ~SensorView();
     void update(AbstractSensor* s = nullptr) override;
     void changeSensor(AbstractSensor* sensorPointer);
 };

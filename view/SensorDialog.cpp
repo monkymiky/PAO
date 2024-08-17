@@ -27,14 +27,14 @@ void SensorDialog::addFrame(QString label, QWidget & widget, QLayout& layout){
 SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
     : mainWindow(mainWindow),
     sensor(sensor),
-    dataFields(),
+    sensorSpecificField(),
     QDialog(&mainWindow),
     titleLE(QLineEdit(this)),
     shortDescLE(QLineEdit(this)),
     longDescTE(QTextEdit(this)),
     sensibilityLE(QLineEdit(this)),
     spanSimulLE(QLineEdit(this)),
-    typeCB(new QComboBox(this)),
+    typeField(new QComboBox(this)),
     maxLE(QLineEdit(this)),
     minLE(QLineEdit(this)),
     
@@ -79,7 +79,7 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
     scrollArea->setWidget(scrollFrame);
 
     if(sensor != nullptr){
-        titleLE.setText(QString::fromStdString(sensor->getName()));
+        titleLE.setText(QString::fromStdString(sensor->getTitle()));
         shortDescLE.setText(QString::fromStdString(sensor->getShortDescription()));
         longDescTE.setText(QString::fromStdString(sensor->getLongDescription()));
         sensibilityLE.setText(QString::number(sensor->getSensibility()));
@@ -99,18 +99,18 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
     if(sensor != nullptr){
         ModifySensorVisitor visitor(scrollFrame);
         sensor->accept(visitor);
-        mainLayout->addWidget(visitor.getCBFrame());
-        mainLayout->addWidget(visitor.getSensorDataFrame());
-        dataFields = visitor.getDataFields();
-        typeCB = visitor.getTypeCB();
+        mainLayout->addWidget(visitor.gettypeFrame());
+        mainLayout->addWidget(visitor.getsensorSpec());
+        sensorSpecificField = visitor.getsensorSpecificField();
+        typeField = visitor.gettypeField();
         yAxisLabelItem->setText(*(visitor.getYAxisLabel()));
     }else{
-        typeCB->addItem("Temperatura NTP", 0);
-        typeCB->addItem("Umidità NTC", 1);
-        typeCB->addItem("Polveri PM 2,5", 2);
-        addFrame(QString::fromStdString("Tipo di Sensore: "), *typeCB, *mainLayout);
+        typeField->addItem("Temperatura NTP", 0);
+        typeField->addItem("Umidità NTC", 1);
+        typeField->addItem("Polveri PM 2,5", 2);
+        addFrame(QString::fromStdString("Tipo di Sensore: "), *typeField, *mainLayout);
 
-        connect(typeCB, SIGNAL(currentIndexChanged(int)), this, SLOT(showType(int)));
+        connect(typeField, SIGNAL(currentIndexChanged(int)), this, SLOT(showType(int)));
 
         tempFrame.setFrameShape(QFrame::StyledPanel);
 
@@ -226,7 +226,7 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
 
 void SensorDialog::saveSensor(){
 
-    std::string name = titleLE.text().toStdString();
+    std::string title = titleLE.text().toStdString();
     std::string shortDescription = shortDescLE.text().toStdString();
     std::string longDescription = longDescTE.toPlainText().toStdString();
     std::string xAxisLabel = tableWidget->item(2,1)->text().toStdString();
@@ -236,12 +236,12 @@ void SensorDialog::saveSensor(){
     double maxMeasurable = maxLE.text().toDouble();
     double minMeasurable = minLE.text().toDouble();
 
-    if(name.empty() || shortDescription.empty() || longDescription.empty() || xAxisLabel.empty()){
+    if(title.empty() || shortDescription.empty() || longDescription.empty() || xAxisLabel.empty()){
         QMessageBox::warning(this, "Avviso:", "Tutti i campi devono essere compilati");
         return;
     }
 
-    int sw = typeCB->currentIndex();
+    int sw = typeField->currentIndex();
     if(sensor == nullptr){
         if(sw == 0){
             double r0 = tempR0.text().toDouble();
@@ -257,7 +257,7 @@ void SensorDialog::saveSensor(){
                 return;
             }
 
-            sensor = new TemperaturePRTS(name,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,r0,alpha,beta,gamma,delta,epsilon,zeta);
+            sensor = new TemperaturePRTS(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,r0,alpha,beta,gamma,delta,epsilon,zeta);
         }else if (sw == 1){
             double Ah = humidA.text().toDouble();
             double Bh = humidB.text().toDouble();
@@ -268,7 +268,7 @@ void SensorDialog::saveSensor(){
                 return;
             }
 
-            sensor = new HumidityNTCS(name,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ah,Bh,Ch);
+            sensor = new HumidityNTCS(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ah,Bh,Ch);
         }else if(sw == 2){
             double Ad = dustA.text().toDouble();
             double Bd = dustB.text().toDouble();
@@ -278,13 +278,13 @@ void SensorDialog::saveSensor(){
                 return;
             }
                 
-            sensor = new Dust25S(name,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ad,Bd);
+            sensor = new Dust25S(title,shortDescription,longDescription,xAxisLabel,simulationSpan,sensibility,maxMeasurable,minMeasurable,Ad,Bd);
         }else {
             std::cerr << "Unexpected sensor type selected in SensorDialog::save()";
         }
-        mainWindow.addNewSensor(sensor);
+        mainWindow.addSensor(sensor);
     }else{
-        sensor->setName(name);
+        sensor->setTitle(title);
         sensor->setShortDescription(shortDescription);
         sensor->setLongDescription(longDescription);
         sensor->setXAxisLabel(xAxisLabel);
@@ -294,13 +294,13 @@ void SensorDialog::saveSensor(){
         sensor->setMinMeasurable(minMeasurable);
 
         if(sw == 0){
-            double r0 = dataFields["R0"]->text().toDouble();
-            double alpha = dataFields["Alpha"]->text().toDouble();
-            double beta = dataFields["Beta"]->text().toDouble();
-            double gamma = dataFields["Gamma"]->text().toDouble();
-            double delta = dataFields["Delta"]->text().toDouble();
-            double epsilon = dataFields["Epsilon"]->text().toDouble();
-            double zeta = dataFields["Zeta"]->text().toDouble();
+            double r0 = sensorSpecificField["R0"]->text().toDouble();
+            double alpha = sensorSpecificField["Alpha"]->text().toDouble();
+            double beta = sensorSpecificField["Beta"]->text().toDouble();
+            double gamma = sensorSpecificField["Gamma"]->text().toDouble();
+            double delta = sensorSpecificField["Delta"]->text().toDouble();
+            double epsilon = sensorSpecificField["Epsilon"]->text().toDouble();
+            double zeta = sensorSpecificField["Zeta"]->text().toDouble();
 
             if(auto tempSensor = dynamic_cast<TemperaturePRTS*>(sensor)){
                 tempSensor->setR0(r0);
@@ -313,9 +313,9 @@ void SensorDialog::saveSensor(){
             }
         }
         else if(sw == 1){
-            double Ah = dataFields["A"]->text().toDouble();
-            double Bh = dataFields["B"]->text().toDouble();
-            double Ch = dataFields["C"]->text().toDouble();
+            double Ah = sensorSpecificField["A"]->text().toDouble();
+            double Bh = sensorSpecificField["B"]->text().toDouble();
+            double Ch = sensorSpecificField["C"]->text().toDouble();
             if(auto humidSensor = dynamic_cast<HumidityNTCS*>(sensor)){
                 humidSensor->setA(Ah);
                 humidSensor->setB(Bh);
@@ -324,8 +324,8 @@ void SensorDialog::saveSensor(){
         }
         else if(sw == 2){
 
-            double Ad = dataFields["A"]->text().toDouble();
-            double Bd = dataFields["B"]->text().toDouble();
+            double Ad = sensorSpecificField["A"]->text().toDouble();
+            double Bd = sensorSpecificField["B"]->text().toDouble();
             if(auto dustSensor = dynamic_cast<Dust25S*>(sensor)){
                 dustSensor->setA(Ad);
                 dustSensor->setB(Bd);
@@ -334,7 +334,7 @@ void SensorDialog::saveSensor(){
         else {
             std::cerr << "Unexpected sensor type selected in SensorDialog::save()";
         }
-        sensor->clearPointVector();  
+        sensor->clearPoints();  
     }
 
     for (int column = 2; column < tableWidget->columnCount()-1; column++) {
@@ -391,7 +391,7 @@ void SensorDialog::addPoint(){
     removeButton->setStyleSheet("background-color: red");
     tableWidget->setCellWidget(0, columnCount-1, removeButton);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeColumn()));
-    addP->setIndex(columnCount);
+    addP->setPositionIndex(columnCount);
 }
 
 void SensorDialog::removeColumn(){
@@ -407,7 +407,7 @@ void SensorDialog::removeColumn(){
             removeButton->setIndex(i);
         }
     }
-    addP->setIndex(tableWidget->columnCount());
+    addP->setPositionIndex(tableWidget->columnCount());
 }
 
 

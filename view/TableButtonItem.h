@@ -9,12 +9,12 @@ namespace View {
 class TableButtonItem : public QPushButton, public QTableWidgetItem {
     Q_OBJECT
     private:
-        int index;
+        int positionIndex;
     public:
-        TableButtonItem(const QString& text,int index, QWidget* parent = nullptr)
-        : QPushButton(text, parent), QTableWidgetItem(text), index(index){};
-        int getIndex() const {return index;};
-        void setIndex(int index){this->index = index;};  
+        TableButtonItem(const QString& text,int positionIndex, QWidget* parent = nullptr)
+        : QPushButton(text, parent), QTableWidgetItem(text), positionIndex(positionIndex){};
+        int getpositionIndex() const;
+        void setpositionIndex(int positionIndex);  
 };
 }
 }

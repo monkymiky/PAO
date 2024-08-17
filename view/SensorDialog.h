@@ -32,14 +32,14 @@ class SensorDialog: public QDialog {
   private:
     MainWindow& mainWindow;
     AbstractSensor* sensor;
-    std::unordered_map<std::string, QLineEdit*> dataFields;
+    std::unordered_map<std::string, QLineEdit*> sensorSpecificField;
 
     QLineEdit  titleLE;
     QLineEdit  shortDescLE;
     QTextEdit  longDescTE;
     QLineEdit  sensibilityLE;
     QLineEdit  spanSimulLE;
-    QComboBox* typeCB;
+    QComboBox* typeField;
     QLineEdit  maxLE;
     QLineEdit  minLE;
     
@@ -72,7 +72,7 @@ class SensorDialog: public QDialog {
     void addFrame(QString label, QWidget & widget, QLayout& layout);   
   
   public:
-    SensorDialog(MainWindow& mainWinow, AbstractSensor* sensor = nullptr);
+    SensorDialog(MainWindow& mainWindow, AbstractSensor* sensor = nullptr);
     
   private slots:
     void saveSensor();

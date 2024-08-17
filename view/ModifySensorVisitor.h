@@ -19,22 +19,22 @@ namespace View{
 class ModifySensorVisitor : public VisitorInterface {
 private:
     QWidget* parent;
-    QFrame* CBframe;
-    QComboBox* typeCB;
-    QFrame* sensorDataFrame;
-    std::unordered_map<std::string, QLineEdit*> dataFields;
+    QFrame* typeFrame;
+    QComboBox* typeField;
+    QFrame* sensorSpec;
+    std::unordered_map<std::string, QLineEdit*> sensorSpecificField;
     QString * yAxisLabel;
 
     void addDataField(QString label, QString label2, QFrame* parentFrame, QVBoxLayout* layout);
 
 public:
-    ModifySensorVisitor(QWidget* parent);
+    ModifySensorVisitor(QWidget* parent);ù
 
-    QFrame* getCBFrame() const { return CBframe; }  
-    QFrame* getSensorDataFrame() const { return sensorDataFrame; }
-    std::unordered_map<std::string, QLineEdit*> getDataFields() const { return dataFields; }
-    QComboBox* getTypeCB() const { return typeCB; }
-    QString* getYAxisLabel() const { return yAxisLabel; }
+    QFrame* gettypeFrame() const ;
+    QFrame* getsensorSpec() const ;
+    std::unordered_map<std::string, QLineEdit*> getsensorSpecificField() const ;
+    QComboBox* gettypeField() const ;
+    QString* getYAxisLabel() const ;
 
     void visitTemperaturePRTS(const TemperaturePRTS& sensor) override ;
 

@@ -24,8 +24,8 @@ class Dust25S : public AbstractSensor{
             const  double sensibility,
             const  double maxMeasurable,
             const  double minMeasurable,
-            const double a = 1.2,
-            const double b = 5);
+            const double a,
+            const double b);
 
     void accept(VisitorInterface& visitor) override;
     double getA() const;

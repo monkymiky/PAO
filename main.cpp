@@ -1,6 +1,6 @@
 #include "./view/MainWindow.h"
 #include "./view/Aside.h"
-#include "./view/MainSensorView.h"
+#include "./view/SensorView.h"
 #include "./sensor/AbstractSensor.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
 
     Sensor::SensorManager  manager =  Sensor::SensorManager();
-    Sensor::View::MainSensorView  mainView =  Sensor::View::MainSensorView();
+    Sensor::View::SensorView  mainView =  Sensor::View::SensorView();
     Sensor::View::Aside  aside =   Sensor::View::Aside();
     Sensor::View::MainWindow mainWindow =  Sensor::View::MainWindow(manager,aside,mainView);
 

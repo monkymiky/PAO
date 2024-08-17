@@ -14,7 +14,7 @@ namespace Sensor{
 class AbstractSensor {
 
     private:
-    std::string name;
+    std::string title;
     std::string sensorType;
     std::string shortDescription;
     std::string longDescription;
@@ -28,16 +28,16 @@ class AbstractSensor {
     double max;
     double average;
     double variance;
-    double lastMeasureTime;
+    double lastXVal;
     std::vector<std::array<double, 2>> measure; // measure[i][0] == misura;  measure[i][1] == tempo  ------------------- accesso sbagliato ma ilò senso è quello 
     std::vector<ObserverInterface*> observers;
     protected:
-    virtual double trasmute(double rawMeasure) const = 0;
+    static double trasmute(double rawMeasure) const = 0;
 
     public:
 
-    virtual ~AbstractSensor();
-    AbstractSensor(     const std::string name,
+    virtual ~AbstractSensor() = default;
+    AbstractSensor(     const std::string title,
                         const  std::string sensorType,
                         const  std::string shortDesc,
                         const  std::string longDesc,
@@ -49,10 +49,10 @@ class AbstractSensor {
                         const  double minMeasurable);
     AbstractSensor();
     void addPoint(std::array<double, 2>&);
-    void deletePoint(int);
-    void clearPointVector();
+    void deletePointAt(int);
+    void clearPoints();
     void addRawPoint(std::array<double, 2>&);
-    void addPointVector(std::vector<std::array<double, 2>>&);
+    void addPoints(std::vector<std::array<double, 2>>&);
     virtual void simulate(); 
     virtual void accept(VisitorInterface& visitor) = 0;
     void addObserver(ObserverInterface* observer);
@@ -60,7 +60,7 @@ class AbstractSensor {
     void notifyAllObservers(AbstractSensor* sensor) ;
     // getter 
     const std::vector<ObserverInterface*>& getObservers() const;
-    const std::string& getName() const;
+    const std::string& getTitle() const;
     const std::string& getSensorType() const;
     const std::string& getShortDescription() const;
     const std::string& getLongDescription() const;
@@ -76,7 +76,7 @@ class AbstractSensor {
     double getSensibility() const;
     const std::vector<std::array<double, 2>>& getMeasure() const;
     // setter
-    void setName(const std::string&);
+    void setTitle(const std::string&);
     void setSensorType(const std::string&);
     void setShortDescription(const std::string&);
     void setLongDescription(const std::string&);

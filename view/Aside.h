@@ -4,7 +4,7 @@
 #include "../sensor/AbstractSensor.h"
 #include "../sensor/ObserverInterface.h"
 #include "../sensor/SensorManager.h"
-#include "MainSensorView.h"
+#include "SensorView.h"
 #include "SensorSmallView.h"
 #include "MainWindow.h"
 
@@ -29,12 +29,12 @@ class Aside: public QWidget {
     Q_OBJECT
   private:
     std::list<SmallSensorView*> smallSViewList;
-    QFrame* sensorScrollFrame;
-    QVBoxLayout* SensorListLayout; 
+    QFrame* sensorOutFrame;
+    QVBoxLayout* sensorsLayout; 
     QLineEdit* search;
   public:
     Aside(QWidget* parent = nullptr);
-    void clearSSVList();
+    void clearAllSSV();
     void deleteSSV(AbstractSensor* sensor);
     void addSSV(SmallSensorView* ssv);
 

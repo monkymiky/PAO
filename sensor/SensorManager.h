@@ -7,7 +7,7 @@
 namespace Sensor{
 class SensorManager {
 private:
-    std::vector<AbstractSensor*> sensorList;
+    std::vector<AbstractSensor*> sensors;
     std::vector<ObserverInterface*> observers;
 
 public:

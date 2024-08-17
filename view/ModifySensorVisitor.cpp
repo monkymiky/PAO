@@ -11,84 +11,90 @@ namespace Sensor {
             QLineEdit* lineEdit2 = new QLineEdit(label2, Frame);
             frameLayout->addWidget(lineEdit2);
             layout->addWidget(Frame);
-            dataFields[label.toStdString()] = lineEdit2;
+            sensorSpecificField[label.toStdString()] = lineEdit2;
         }
 
         ModifySensorVisitor::ModifySensorVisitor(QWidget* parent) : 
-        parent(parent), CBframe(new QFrame(parent)), 
-        typeCB(new QComboBox(parent)), sensorDataFrame(new QFrame(parent))
+        parent(parent), typeFrame(new QFrame(parent)), 
+        typeField(new QComboBox(parent)), sensorSpec(new QFrame(parent))
         {}
 
         void ModifySensorVisitor::visitTemperaturePRTS(const TemperaturePRTS& sensor) {
-        typeCB->addItem("Temperatura NTP", 0);
-        typeCB->addItem("Umidità NTC", 1);
-        typeCB->addItem("Polveri PM 2,5", 2);
-        typeCB->setCurrentIndex(0); // Set the combobox to "Temperatura NTP"
+        typeField->addItem("Temperatura NTP", 0);
+        typeField->addItem("Umidità NTC", 1);
+        typeField->addItem("Polveri PM 2,5", 2);
+        typeField->setCurrentIndex(0); // Set the combobox to "Temperatura NTP"
         yAxisLabel = new QString("Temperatura [°C]");
 
-        CBframe->setFrameShape(QFrame::StyledPanel);
-        CBframe->setVisible(false);
+        typeFrame->setFrameShape(QFrame::StyledPanel);
+        typeFrame->setVisible(false);
 
-        QHBoxLayout *frameLayout = new QHBoxLayout(CBframe);
-        QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),CBframe);
+        QHBoxLayout *frameLayout = new QHBoxLayout(typeFrame);
+        QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),typeFrame);
         frameLayout->addWidget(Lab);
-        frameLayout->addWidget(typeCB);
+        frameLayout->addWidget(typeField);
         
-        sensorDataFrame->setFrameShape(QFrame::StyledPanel);
-        QVBoxLayout* tempLayout = new QVBoxLayout(sensorDataFrame);
+        sensorSpec->setFrameShape(QFrame::StyledPanel);
+        QVBoxLayout* tempLayout = new QVBoxLayout(sensorSpec);
 
-        addDataField(QString::fromStdString("R0"),QString::number(sensor.getR0()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Alpha"),QString::number(sensor.getAlpha()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Beta"),QString::number(sensor.getBeta()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Gamma"),QString::number(sensor.getGamma()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Delta"),QString::number(sensor.getDelta()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Epsilon"),QString::number(sensor.getEpsilon()) , sensorDataFrame, tempLayout);
-        addDataField(QString::fromStdString("Zeta"),QString::number(sensor.getZeta()) , sensorDataFrame, tempLayout);
+        addDataField(QString::fromStdString("R0"),QString::number(sensor.getR0()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Alpha"),QString::number(sensor.getAlpha()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Beta"),QString::number(sensor.getBeta()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Gamma"),QString::number(sensor.getGamma()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Delta"),QString::number(sensor.getDelta()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Epsilon"),QString::number(sensor.getEpsilon()) , sensorSpec, tempLayout);
+        addDataField(QString::fromStdString("Zeta"),QString::number(sensor.getZeta()) , sensorSpec, tempLayout);
         }
         
         void ModifySensorVisitor::visitHumidityNTCS(const HumidityNTCS& sensor) {
-            typeCB->addItem("Temperatura NTP", 0);
-            typeCB->addItem("Umidità NTC", 1);
-            typeCB->addItem("Polveri PM 2,5", 2);
-            typeCB->setCurrentIndex(1); // Set the combobox to "Umidità NTC"
+            typeField->addItem("Temperatura NTP", 0);
+            typeField->addItem("Umidità NTC", 1);
+            typeField->addItem("Polveri PM 2,5", 2);
+            typeField->setCurrentIndex(1); // Set the combobox to "Umidità NTC"
             yAxisLabel = new QString("Umidità [%]");
             
 
-            CBframe->setFrameShape(QFrame::StyledPanel);
-            CBframe->setVisible(false);
+            typeFrame->setFrameShape(QFrame::StyledPanel);
+            typeFrame->setVisible(false);
 
-            QHBoxLayout *frameLayout = new QHBoxLayout(CBframe);
-            QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),CBframe);
+            QHBoxLayout *frameLayout = new QHBoxLayout(typeFrame);
+            QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),typeFrame);
             frameLayout->addWidget(Lab);
-            frameLayout->addWidget(typeCB);
+            frameLayout->addWidget(typeField);
             
-            sensorDataFrame->setFrameShape(QFrame::StyledPanel);
-            QVBoxLayout* humidLayout = new QVBoxLayout(sensorDataFrame);
+            sensorSpec->setFrameShape(QFrame::StyledPanel);
+            QVBoxLayout* humidLayout = new QVBoxLayout(sensorSpec);
 
-            addDataField(QString::fromStdString("A"),QString::number(sensor.getA()) , sensorDataFrame, humidLayout);
-            addDataField(QString::fromStdString("B"),QString::number(sensor.getB()) , sensorDataFrame, humidLayout);
-            addDataField(QString::fromStdString("C"),QString::number(sensor.getC()) , sensorDataFrame, humidLayout);
+            addDataField(QString::fromStdString("A"),QString::number(sensor.getA()) , sensorSpec, humidLayout);
+            addDataField(QString::fromStdString("B"),QString::number(sensor.getB()) , sensorSpec, humidLayout);
+            addDataField(QString::fromStdString("C"),QString::number(sensor.getC()) , sensorSpec, humidLayout);
         }
 
         void ModifySensorVisitor::visitDust25S(const Dust25S& sensor){
-        typeCB->addItem("Temperatura NTP", 0);
-        typeCB->addItem("Umidità NTC", 1);
-        typeCB->addItem("Polveri PM 2,5", 2);
-        typeCB->setCurrentIndex(2); // Set the combobox to "Polveri PM 2,5"
+        typeField->addItem("Temperatura NTP", 0);
+        typeField->addItem("Umidità NTC", 1);
+        typeField->addItem("Polveri PM 2,5", 2);
+        typeField->setCurrentIndex(2); // Set the combobox to "Polveri PM 2,5"
         yAxisLabel = new QString("Polveri PM 2,5 [mg/m^3]");
 
-        CBframe->setFrameShape(QFrame::StyledPanel);
-        CBframe->setVisible(false);
-        QHBoxLayout *frameLayout = new QHBoxLayout(CBframe);
-        QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),CBframe);
+        typeFrame->setFrameShape(QFrame::StyledPanel);
+        typeFrame->setVisible(false);
+        QHBoxLayout *frameLayout = new QHBoxLayout(typeFrame);
+        QLabel *Lab = new QLabel(QString::fromStdString("Tipo di Sensore: "),typeFrame);
         frameLayout->addWidget(Lab);
-        frameLayout->addWidget(typeCB);
+        frameLayout->addWidget(typeField);
 
-        sensorDataFrame->setFrameShape(QFrame::StyledPanel);
-        QVBoxLayout* dustLayout = new QVBoxLayout(sensorDataFrame);
+        sensorSpec->setFrameShape(QFrame::StyledPanel);
+        QVBoxLayout* dustLayout = new QVBoxLayout(sensorSpec);
 
-        addDataField(QString::fromStdString("A"),QString::number(sensor.getA()) , sensorDataFrame, dustLayout);
-        addDataField(QString::fromStdString("B"),QString::number(sensor.getB()) , sensorDataFrame, dustLayout);
+        addDataField(QString::fromStdString("A"),QString::number(sensor.getA()) , sensorSpec, dustLayout);
+        addDataField(QString::fromStdString("B"),QString::number(sensor.getB()) , sensorSpec, dustLayout);
     }
+
+    QFrame* ModifySensorVisitor::gettypeFrame() const { return typeFrame; }  
+    QFrame* ModifySensorVisitor::getsensorSpec() const { return sensorSpec; }
+    std::unordered_map<std::string, QLineEdit*> ModifySensorVisitor::getsensorSpecificField() const { return sensorSpecificField; }
+    QComboBox* ModifySensorVisitor::gettypeField() const { return typeField; }
+    QString* ModifySensorVisitor::getYAxisLabel() const { return yAxisLabel; }
 } 
 }

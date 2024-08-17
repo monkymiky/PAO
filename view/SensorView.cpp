@@ -1,4 +1,4 @@
-#include "MainSensorView.h"
+#include "SensorView.h"
 #include <vector>
 #include <array>
 #include <iostream> 
@@ -11,7 +11,7 @@
 
 namespace Sensor { 
 namespace View {
-    void MainSensorView::drawChart()
+    void SensorView::drawChart()
     {
         if(sensor == nullptr){
             chart->setTitle(QString::fromStdString("titolo"));
@@ -54,13 +54,13 @@ namespace View {
         chartView->setMinimumHeight(this->width()/3);
     }
 
-MainSensorView::MainSensorView(AbstractSensor *sensor , QWidget *parent)
+SensorView::SensorView(AbstractSensor *sensor , QWidget *parent)
 : QWidget(parent), sensor(sensor)
 {
 
-    QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
-    MainSensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    setLayout(MainSensorViewLayout);
+    QVBoxLayout* SensorViewLayout = new QVBoxLayout(this);
+    SensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setLayout(SensorViewLayout);
     
     QFrame* titleFrame = new QFrame(this);
     QHBoxLayout* titleFrameLayout = new QHBoxLayout(titleFrame);
@@ -70,14 +70,14 @@ MainSensorView::MainSensorView(AbstractSensor *sensor , QWidget *parent)
     titleFrameLayout->addWidget(title);
     titleFrameLayout->addStretch();
 
-    MainSensorViewLayout->addWidget(titleFrame);
+    SensorViewLayout->addWidget(titleFrame);
 
     
     QScrollArea *scrollArea = new QScrollArea(this);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     scrollArea->setWidgetResizable(true);
 
-    MainSensorViewLayout->addWidget(scrollArea);
+    SensorViewLayout->addWidget(scrollArea);
 
     QFrame* ScrollFrame = new QFrame(this);
     QGridLayout* ScrollFrameLayout = new QGridLayout(ScrollFrame);
@@ -119,16 +119,16 @@ MainSensorView::MainSensorView(AbstractSensor *sensor , QWidget *parent)
 
     
 }
-MainSensorView::~MainSensorView() {
+SensorView::~SensorView() {
     delete(chart);
     delete(chartView);
     delete(series);
 };
-MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
+SensorView::SensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
 {
-    QVBoxLayout* MainSensorViewLayout = new QVBoxLayout(this);
-    MainSensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    setLayout(MainSensorViewLayout);
+    QVBoxLayout* SensorViewLayout = new QVBoxLayout(this);
+    SensorViewLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setLayout(SensorViewLayout);
     
     QFrame* titleFrame = new QFrame(this);
     QHBoxLayout* titleFrameLayout = new QHBoxLayout(titleFrame);
@@ -139,14 +139,14 @@ MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr
     titleFrameLayout->addWidget(title);
     titleFrameLayout->addStretch();
 
-    MainSensorViewLayout->addWidget(titleFrame);
+    SensorViewLayout->addWidget(titleFrame);
 
     
     QScrollArea *scrollArea = new QScrollArea(this);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     scrollArea->setWidgetResizable(true);
 
-    MainSensorViewLayout->addWidget(scrollArea);
+    SensorViewLayout->addWidget(scrollArea);
 
     QFrame* ScrollFrame = new QFrame(this);
     QGridLayout* ScrollFrameLayout = new QGridLayout(ScrollFrame);
@@ -189,7 +189,7 @@ MainSensorView::MainSensorView(QWidget* parent): QWidget(parent), sensor(nullptr
     
 };
 
-void MainSensorView::update( AbstractSensor* s){
+void SensorView::update( AbstractSensor* s){
     if(sensor == nullptr){
         title->setText("Titolo sensore:");
         type->setText("Sensore:");
@@ -220,7 +220,7 @@ void MainSensorView::update( AbstractSensor* s){
 
 
 
-void  MainSensorView::changeSensor(AbstractSensor* sensorPointer){
+void  SensorView::changeSensor(AbstractSensor* sensorPointer){
     if (sensor){
         sensor->removeObserver(this);
     }
