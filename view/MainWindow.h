@@ -7,36 +7,36 @@
 #include "../sensor/SensorManager.h"
 #include "../sensor/AbstractSensor.h"
 
+
+namespace Sensor{
+namespace View{
 class Aside;
-namespace Sensor
-{
-namespace View
-{
     
 class MainWindow : public QMainWindow {
     Q_OBJECT
     private:
+    SensorManager& manager;
     Aside& aside;
     SensorView& sensorView;
-    SensorManager& manager;
     AbstractSensor* currentSensor;
     public:
-    ~MainWindow() override;
     MainWindow( SensorManager& manager, 
                 Aside& aside , 
                 SensorView& sensorView,
                 QWidget *parent = nullptr );
     void addSensor(AbstractSensor* sensor);
+    void deleteSensor(AbstractSensor * sensor);
+    void deleteCurrentSensor();
  
     private slots:
     void changeCurrentSensor(AbstractSensor* sensor);
-    void buttonAddClicked();
-    void deleteSensor();
-    void saveSensors();
-    void openSensorFile();
-    void closeSensors();
-    void simulate();
-    void modify();
+    void buttonAddClicked() ;
+    void buttonDeleteClicked();
+    void saveSensors() ;
+    void openSensorFile() ;
+    void closeSensors() ;
+    void simulate() const;
+    void modify() ;
 };
 
 } 

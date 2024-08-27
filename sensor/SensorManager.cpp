@@ -26,7 +26,7 @@ void SensorManager::cleanSensors() {
     sensors.clear();
 }
 
-void SensorManager::addSensors(const std::vector<AbstractSensor*>& sensors) {
+void SensorManager::addSensors( std::vector<AbstractSensor*>& sensors) {
     sensors.insert(sensors.end(), sensors.begin(), sensors.end());
 }
 

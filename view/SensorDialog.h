@@ -30,6 +30,7 @@ namespace View {
 class SensorDialog: public QDialog {
     Q_OBJECT
   private:
+
     MainWindow& mainWindow;
     AbstractSensor* sensor;
     std::unordered_map<std::string, QLineEdit*> sensorSpecificField;
@@ -66,18 +67,18 @@ class SensorDialog: public QDialog {
     QFrame dataOutFrame;
     QLabel  dataL;
     QTableWidgetItem* yAxisLabelItem;
-    QTableWidget* tableWidget; 
+    QTableWidget* tableWidget;
     
 
-    void addFrame(QString label, QWidget & widget, QLayout& layout);   
+    void addFrame(const QString& label,  QWidget & widget, QLayout& layout);
   
   public:
     SensorDialog(MainWindow& mainWindow, AbstractSensor* sensor = nullptr);
     
   private slots:
     void saveSensor();
-    void showType(int index);
-    void addPoint();
+    void showType(int index) ;
+    void addColumn();
     void removeColumn();
 };
 

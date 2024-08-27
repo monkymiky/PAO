@@ -5,8 +5,6 @@
 
 namespace Sensor{
 
-HumidityNTCS::~HumidityNTCS(){}; 
-
 void HumidityNTCS::createInterpolationTable(){
     for (int i = 0; i <101; ++i) {
         // Calculate the rawMeasure for a relative humidity value
@@ -15,7 +13,7 @@ void HumidityNTCS::createInterpolationTable(){
         interpolationTable.push_back(UR);
     } 
 };
-double HumidityNTCS::trasmute(double rawMeasure) const  {
+double HumidityNTCS::trasmuteYVal(double rawMeasure) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -64,7 +62,7 @@ HumidityNTCS::HumidityNTCS( const std::string name,
                                 createInterpolationTable();
                             };
 
-void HumidityNTCS::accept(VisitorInterface& visitor){
+void HumidityNTCS::accept(ConstVisitorInterface& visitor) const{
     visitor.visitHumidityNTCS(*this);
 };
 

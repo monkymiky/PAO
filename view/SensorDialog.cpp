@@ -5,6 +5,8 @@
 #include "../sensor/HumidityS.h"
 #include "ModifySensorVisitor.h"
 #include <QtWidgets/QMessageBox>
+#include <QDoubleValidator>
+
 
 
 #include <iostream>
@@ -12,7 +14,7 @@
 namespace Sensor {
 namespace View {
 
-void SensorDialog::addFrame(QString label, QWidget & widget, QLayout& layout){
+void SensorDialog::addFrame(const QString& label, QWidget & widget, QLayout& layout){
     QFrame *Frame = new QFrame(this);
     Frame->setFrameShape(QFrame::StyledPanel);
    
@@ -25,9 +27,10 @@ void SensorDialog::addFrame(QString label, QWidget & widget, QLayout& layout){
 };
 
 SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
-    : mainWindow(mainWindow),
-    sensor(sensor),
+    :
     QDialog(&mainWindow),
+    mainWindow(mainWindow),
+    sensor(sensor),
     titleLE(QLineEdit(this)),
     shortDescLE(QLineEdit(this)),
     longDescTE(QTextEdit(this)),
@@ -103,6 +106,10 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
         sensorSpecificField = visitor.getsensorSpecificField();
         typeField = visitor.gettypeField();
         yAxisLabelItem->setText(*(visitor.getYAxisLabel()));
+
+        for(auto sensorField : sensorSpecificField){
+            sensorField.second->setValidator(new QDoubleValidator());
+        }
     }else{
         typeField->addItem("Temperatura NTP", 0);
         typeField->addItem("Umidità NTC", 1);
@@ -122,6 +129,14 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
         addFrame(QString::fromStdString("Epsilon : "), tempEpsilon, *tempLayout);
         addFrame(QString::fromStdString("Zeta : "), tempZeta, *tempLayout);
 
+        tempR0.setValidator(new QDoubleValidator());
+        tempAlpha.setValidator(new QDoubleValidator());
+        tempBeta.setValidator(new QDoubleValidator());
+        tempGamma.setValidator(new QDoubleValidator());
+        tempDelta.setValidator(new QDoubleValidator());
+        tempEpsilon.setValidator(new QDoubleValidator());
+        tempZeta.setValidator(new QDoubleValidator());
+
         mainLayout->addWidget(&tempFrame);
         tempFrame.hide();
 
@@ -132,6 +147,10 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
         addFrame(QString::fromStdString("B : "), humidB, *humidLayout);
         addFrame(QString::fromStdString("C : "), humidC, *humidLayout);
 
+        humidA.setValidator(new QDoubleValidator());
+        humidB.setValidator(new QDoubleValidator());
+        humidC.setValidator(new QDoubleValidator());
+
         mainLayout->addWidget(&humidFrame);
         humidFrame.hide();
 
@@ -141,9 +160,21 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
         addFrame(QString::fromStdString("A : "), dustA, *dustLayout);
         addFrame(QString::fromStdString("B : "), dustB, *dustLayout);
 
+        dustA.setValidator(new QDoubleValidator());
+        dustB.setValidator(new QDoubleValidator());
+
         mainLayout->addWidget(&dustFrame);
         dustFrame.hide();
     }
+
+    sensibilityLE.setValidator(new QDoubleValidator());
+    spanSimulLE.setValidator(new QDoubleValidator());
+    maxLE.setValidator(new QDoubleValidator());
+    minLE.setValidator(new QDoubleValidator());
+
+    
+
+
 
     mainLayout->addWidget(&dataL);
     
@@ -188,20 +219,20 @@ SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
     // Set button with "+" text in row 0, column 2 rowspan 3 and columnspan 1
     tableWidget->setCellWidget(0, 2, addP);
     addP->setStyleSheet("background-color: green");
-    connect(addP, SIGNAL(clicked()), this, SLOT(addPoint()));
+    connect(addP, SIGNAL(clicked()), this, SLOT(addColumn()));
     tableWidget->setSpan(0, 2, 3, 1);
     if(sensor != nullptr){
-        for (int i = 0; i < sensor->getMeasure().size(); i++)
+        for (unsigned int i = 0; i < sensor->getMeasure().size(); i++)
         {
             tableWidget->insertColumn(i+2);
             QTableWidgetItem* yItem = new QTableWidgetItem(QString::number(sensor->getMeasure()[i][0]));
             tableWidget->setItem(1, i+2, yItem);
             QTableWidgetItem* xItem = new QTableWidgetItem(QString::number(sensor->getMeasure()[i][1]));
             tableWidget->setItem(2, i+2, xItem);
-            TableButtonItem* removeButton = new TableButtonItem("x",i+2, tableWidget);
-            removeButton->setStyleSheet("background-color: red");
-            tableWidget->setCellWidget(0, i+2, removeButton);
-            connect(removeButton, SIGNAL(clicked()), this, SLOT(removeColumn()));
+            TableButtonItem* removeColonButton = new TableButtonItem("x",i+2, tableWidget);
+            removeColonButton->setStyleSheet("background-color: red");
+            tableWidget->setCellWidget(0, i+2, removeColonButton);
+            connect(removeColonButton, SIGNAL(clicked()), this, SLOT(removeColumn()));
         }
     }
     dataOutFrameLayout->addWidget(tableWidget);
@@ -241,6 +272,7 @@ void SensorDialog::saveSensor(){
     }
 
     int sw = typeField->currentIndex();
+    bool sensorIsNew = true;
     if(sensor == nullptr){
         if(sw == 0){
             double r0 = tempR0.text().toDouble();
@@ -292,6 +324,7 @@ void SensorDialog::saveSensor(){
         }
         mainWindow.addSensor(sensor);
     }else{
+        sensorIsNew = false;
         sensor->setTitle(title);
         sensor->setShortDescription(shortDescription);
         sensor->setLongDescription(longDescription);
@@ -351,13 +384,24 @@ void SensorDialog::saveSensor(){
                 double y = yItem->text().toDouble();
                 double x = xItem->text().toDouble();
                 std::array<double, 2> p = {y, x};
-                sensor->addPoint(p);
+                try{
+                    sensor->addPoint(p);
+                }catch(Sensor::DuplicatedXValueException){
+                    if(sensorIsNew){
+                        mainWindow.deleteSensor(sensor);
+                        sensor=nullptr;
+                    } 
+                    else sensor->clearPoints();
+                    QMessageBox::warning(this, "Errore:", "Non sono ammessi valori sull asse X duplicati. Modifica tutti i duplicati e riprova.");
+                    return;
+                }
+               
             }
         }
     close();
 };
 
-void SensorDialog::showType(int index){
+void SensorDialog::showType(int index) {
     tempFrame.hide();
     humidFrame.hide();
     dustFrame.hide();
@@ -385,33 +429,34 @@ void SensorDialog::showType(int index){
     }
 }
 
-void SensorDialog::addPoint(){
+void SensorDialog::addColumn(){
     int columnCount = tableWidget->columnCount();
     tableWidget->insertColumn(columnCount-1);
 
     for (int row = 1; row < tableWidget->rowCount(); row++) {
         QTableWidgetItem* item = new QTableWidgetItem();
         tableWidget->setItem(row, columnCount-1, item);
+
     }
 
-    TableButtonItem* removeButton = new TableButtonItem("x",columnCount-1, tableWidget);
-    removeButton->setStyleSheet("background-color: red");
-    tableWidget->setCellWidget(0, columnCount-1, removeButton);
-    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeColumn()));
+    TableButtonItem* removeColonButton = new TableButtonItem("x",columnCount-1, tableWidget);
+    removeColonButton->setStyleSheet("background-color: red");
+    tableWidget->setCellWidget(0, columnCount-1, removeColonButton);
+    connect(removeColonButton, SIGNAL(clicked()), this, SLOT(removeColumn()));
     addP->setPositionIndex(columnCount);
 }
 
 void SensorDialog::removeColumn(){
-    TableButtonItem* removeButton = dynamic_cast<TableButtonItem*>(sender()); // qt dynamic cast
-    if (removeButton) {
-        int column = removeButton->getIndex();
+    TableButtonItem* removeColonButton = dynamic_cast<TableButtonItem*>(sender()); // qt dynamic cast
+    if (removeColonButton) {
+        int column = removeColonButton->getPositionIndex();
         tableWidget->removeColumn(column);
     }
     // update index of all remove buttons
     for (int i = 2; i < tableWidget->columnCount(); i++) {
-        TableButtonItem* removeButton = dynamic_cast<TableButtonItem*>(tableWidget->cellWidget(0, i));
-        if (removeButton) {
-            removeButton->setIndex(i);
+        TableButtonItem* removeColonButton = dynamic_cast<TableButtonItem*>(tableWidget->cellWidget(0, i));
+        if (removeColonButton) {
+            removeColonButton->setPositionIndex(i);
         }
     }
     addP->setPositionIndex(tableWidget->columnCount());

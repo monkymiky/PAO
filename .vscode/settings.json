@@ -92,6 +92,7 @@
         "any": "cpp",
         "csignal": "cpp",
         "qgridlayout": "cpp",
-        "qapplication": "cpp"
+        "qapplication": "cpp",
+        "qmessagebox": "cpp"
     }
 }

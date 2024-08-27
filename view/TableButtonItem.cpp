@@ -2,7 +2,7 @@
 
 namespace Sensor{
 namespace View{
-    int TableButtonItem::getpositionIndex() const {return positionIndex;};
-    void TableButtonItem::setpositionIndex(int index){this->positionIndex = index;};  
+    int TableButtonItem::getPositionIndex() const {return positionIndex;};
+    void TableButtonItem::setPositionIndex(int index){this->positionIndex = index;};
 }
 }

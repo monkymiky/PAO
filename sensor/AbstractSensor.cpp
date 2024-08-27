@@ -2,15 +2,16 @@
 #include <random>
 #include <cmath>
 #include <iostream>
+#include <exception>
+
 
 namespace Sensor{
-
 
 AbstractSensor::AbstractSensor(): title(""), sensorType(""), shortDescription(""), 
                                 longDescription(""),  xAxisLabel(""), yAxisLabel(""),simulationSpan(0),
                                 sensibility(0), maxMeasurable(0), minMeasurable(0),min(0),max(0),
                                 average(0),variance(0),lastXVal(0){};
-AbstractSensor::AbstractSensor( const std::string title,
+AbstractSensor::AbstractSensor( const  std::string title,
                                 const  std::string sensorType,
                                 const  std::string shortDesc,
                                 const  std::string longDesc,
@@ -25,20 +26,29 @@ AbstractSensor::AbstractSensor( const std::string title,
                                 sensibility(sensibility), maxMeasurable(maxMeasurable), minMeasurable(minMeasurable),
                                 min(0),max(0),average(0),variance(0),lastXVal(0){}
                                 
-void AbstractSensor::addPoint(std::array<double,2>& point){ // in questo progetto non è molto utile come funzione perche non c'è nessun sensore reale che aggiunge le misure una alla volta
-    measure.push_back(point);
-    if (measure.size() > 1){
-        if(max < point[0]) max = point[0];
-        else if (min > point[0]) min = point[0];
-        if(lastXVal < point[1]) lastXVal = point[1];
-        double diff = (point[0] - average);
-        variance = ((variance * (measure.size() - 1) + diff * diff)/measure.size() + (diff * average) / measure.size());
-        average = (average * (measure.size()-1) + point[0] )/ measure.size();
+void AbstractSensor::addPoint(const std::array<double,2>& newPoint){ 
+    if(newPoint[1] > lastXVal) {
+        measure.push_back(newPoint);
     }else{
-        max = point[0];
-        min = point[0];
-        average = point[0];
-        lastXVal = point[1];
+        for(auto it = measure.begin(); it != measure.end(); it++){
+            if(it->at(1) > newPoint[1]){
+                measure.insert(it,newPoint);
+                break;
+            }else if(it->at(1) == newPoint[1]) throw DuplicatedXValueException();
+        }
+    }
+    if (measure.size() > 1){
+        if(max < newPoint[0]) max = newPoint[0];
+        else if (min > newPoint[0]) min = newPoint[0];
+        if(lastXVal < newPoint[1]) lastXVal = newPoint[1];
+        double diff = (newPoint[0] - average);
+        variance = ((variance * (measure.size() - 1) + diff * diff)/measure.size() + (diff * average) / measure.size());
+        average = (average * (measure.size()-1) + newPoint[0] )/ measure.size();
+    }else{
+        max = newPoint[0];
+        min = newPoint[0];
+        average = newPoint[0];
+        lastXVal = newPoint[1];
         variance = 0;
     }
     notifyAllObservers(this);
@@ -55,13 +65,13 @@ void AbstractSensor::clearPoints(){
     variance = 0;
     lastXVal = 0;
 }
-void AbstractSensor::addRawPoint(std::array<double,2>& point){
-    std::array<double,2> tmp = {trasmute(point[0]), point[1]};
-    addPoint(tmp);
+void AbstractSensor::addRawPoint(const std::array<double,2>& rawPoint){
+    std::array<double,2> point = {trasmuteYVal(rawPoint[0]), rawPoint[1]};
+    addPoint(point);
     notifyAllObservers(this);
 }
-void AbstractSensor::addPoints(std::vector<std::array<double, 2>>& vector){
-    measure.insert(measure.end(), std::move(vector.begin()), std::move(vector.end()));
+void AbstractSensor::addPoints(const std::vector<std::array<double, 2>>& points){
+    measure.insert(measure.end(), std::move(points.begin()), std::move(points.end()));
     double sum = 0;
     for (std::array<double, 2> point : measure){
         if(point[0] > max) max = point[0];
@@ -121,17 +131,15 @@ void AbstractSensor::removeObserver(ObserverInterface* observer){
         }
         i++;
     }
-
 };
 
-void AbstractSensor::notifyAllObservers(AbstractSensor* sensor) {
+void AbstractSensor::notifyAllObservers(AbstractSensor* sensor) const {
     if(observers.size() != 0){
         for(auto observer : observers) observer->update(sensor);
     }
 };
 
 // getter -----------------------------------------
-const std::vector<ObserverInterface*>& AbstractSensor::getObservers() const{return observers;};
 const std::string& AbstractSensor::getTitle() const {return title;}
 const std::string& AbstractSensor::getSensorType() const {return sensorType;}
 const std::string& AbstractSensor::getShortDescription() const {return shortDescription;}

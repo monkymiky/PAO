@@ -11,48 +11,49 @@
 
 namespace Sensor { 
 namespace View {
-    void SensorView::drawChart()
-    {
-        if(sensor == nullptr){
-            chart->setTitle(QString::fromStdString("titolo"));
 
-            chart->createDefaultAxes();
-            QValueAxis *axisX = qobject_cast<QValueAxis*>(chart->axes(Qt::Horizontal).first());
-            axisX->setTitleText(QString::fromStdString("x"));
-            QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
-            axisY->setTitleText(QString::fromStdString("y"));
-        }else{
-            chart->removeAllSeries();
-            series = new QLineSeries();
-            
-            double upperY, lowerY, upperX, lowerX;
-            if(sensor->getMeasure().size() != 0){
-                upperY =  sensor->getMeasure()[0][0];
-                lowerY = sensor->getMeasure()[0][0];
-                upperX = sensor->getMeasure()[0][1];
-                lowerX = sensor->getMeasure()[0][1];
-            }
-            
-            for (auto point : sensor->getMeasure()) {
-                if(point[0] > upperY) upperY = point[0];
-                if(point[0] < lowerY) lowerY = point[0];
-                if(point[1] > upperX) upperX = point[1];
-                if(point[1] < lowerX) lowerX = point[1];
-                series->append(point[1], point[0]); 
-            }
+void SensorView::drawChart()
+{
+    if(sensor == nullptr){
+        chart->setTitle(QString::fromStdString("titolo"));
 
-            chart->addSeries(series);
-            chart->setTitle(QString::fromStdString(sensor->getName()));
-
-            QValueAxis *axisX = qobject_cast<QValueAxis*>(chart->axes(Qt::Horizontal).first());
-            axisX->setTitleText(QString::fromStdString(sensor->getXAxisLabel()));
-            axisX->setRange(lowerX, upperX);
-            QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
-            axisY->setTitleText(QString::fromStdString(sensor->getYAxisLabel()));
-            axisY->setRange(lowerY, upperY);
+        chart->createDefaultAxes();
+        QValueAxis *axisX = qobject_cast<QValueAxis*>(chart->axes(Qt::Horizontal).first());
+        axisX->setTitleText(QString::fromStdString("x"));
+        QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
+        axisY->setTitleText(QString::fromStdString("y"));
+    }else{
+        chart->removeAllSeries();
+        series = new QLineSeries();
+        
+        double upperY, lowerY, upperX, lowerX;
+        if(sensor->getMeasure().size() != 0){
+            upperY =  sensor->getMeasure()[0][0];
+            lowerY = sensor->getMeasure()[0][0];
+            upperX = sensor->getMeasure()[0][1];
+            lowerX = sensor->getMeasure()[0][1];
         }
-        chartView->setMinimumHeight(this->width()/3);
+        
+        for (auto point : sensor->getMeasure()) {
+            if(point[0] > upperY) upperY = point[0];
+            if(point[0] < lowerY) lowerY = point[0];
+            if(point[1] > upperX) upperX = point[1];
+            if(point[1] < lowerX) lowerX = point[1];
+            series->append(point[1], point[0]); 
+        }
+
+        chart->addSeries(series);
+        chart->setTitle(QString::fromStdString(sensor->getTitle()));
+
+        QValueAxis *axisX = qobject_cast<QValueAxis*>(chart->axes(Qt::Horizontal).first());
+        axisX->setTitleText(QString::fromStdString(sensor->getXAxisLabel()));
+        axisX->setRange(lowerX, upperX);
+        QValueAxis *axisY = qobject_cast<QValueAxis*>(chart->axes(Qt::Vertical).first());
+        axisY->setTitleText(QString::fromStdString(sensor->getYAxisLabel()));
+        axisY->setRange(lowerY, upperY);
     }
+    chartView->setMinimumHeight(this->width()/3);
+}
 
 SensorView::SensorView(AbstractSensor *sensor , QWidget *parent)
 : QWidget(parent), sensor(sensor)
@@ -66,7 +67,7 @@ SensorView::SensorView(AbstractSensor *sensor , QWidget *parent)
     QHBoxLayout* titleFrameLayout = new QHBoxLayout(titleFrame);
     titleFrame->setLayout(titleFrameLayout);
 
-    title = new QLabel(QString::fromStdString(sensor->getName()), titleFrame);
+    title = new QLabel(QString::fromStdString(sensor->getTitle()), titleFrame);
     titleFrameLayout->addWidget(title);
     titleFrameLayout->addStretch();
 
@@ -107,7 +108,7 @@ SensorView::SensorView(AbstractSensor *sensor , QWidget *parent)
     series = new QLineSeries();
     chart = new QChart();
     chart->addSeries(series);
-    chartView = new QChartView(chart);
+    chartView = new QChartView(chart, this);
     drawChart();
 
     ScrollFrameLayout->addWidget(chartView);
@@ -119,11 +120,7 @@ SensorView::SensorView(AbstractSensor *sensor , QWidget *parent)
 
     
 }
-SensorView::~SensorView() {
-    delete(chart);
-    delete(chartView);
-    delete(series);
-};
+
 SensorView::SensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
 {
     QVBoxLayout* SensorViewLayout = new QVBoxLayout(this);
@@ -189,7 +186,7 @@ SensorView::SensorView(QWidget* parent): QWidget(parent), sensor(nullptr)
     
 };
 
-void SensorView::update( AbstractSensor* s){
+void SensorView::update( AbstractSensor* unusedSensorPointer){
     if(sensor == nullptr){
         title->setText("Titolo sensore:");
         type->setText("Sensore:");
@@ -205,7 +202,7 @@ void SensorView::update( AbstractSensor* s){
         return;
     }
     else{
-        title->setText(QString::fromStdString(sensor->getName()));
+        title->setText(QString::fromStdString(sensor->getTitle()));
         type->setText(QString::fromStdString("Sensore: " + sensor->getSensorType()));
         sensibility->setText(QString::fromStdString("Sensibilità: " + std::to_string(sensor->getSensibility())));
         min->setText(QString::fromStdString("Min: " + std::to_string(sensor->getMin())));

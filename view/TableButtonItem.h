@@ -13,8 +13,8 @@ class TableButtonItem : public QPushButton, public QTableWidgetItem {
     public:
         TableButtonItem(const QString& text,int positionIndex, QWidget* parent = nullptr)
         : QPushButton(text, parent), QTableWidgetItem(text), positionIndex(positionIndex){};
-        int getpositionIndex() const;
-        void setpositionIndex(int index);  
+        int getPositionIndex() const;
+        void setPositionIndex(int index);
 };
 }
 }

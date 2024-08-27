@@ -9,9 +9,9 @@ class HumidityNTCS;
 
 
 
-class VisitorInterface {
+class ConstVisitorInterface {
   public:
-    virtual ~VisitorInterface() {};
+    virtual ~ConstVisitorInterface() = default;
     virtual void visitTemperaturePRTS(const TemperaturePRTS& TemperaturePRT) = 0;
     virtual void visitHumidityNTCS(const HumidityNTCS& Humidity) = 0;
     virtual void visitDust25S(const Dust25S& Dust25) = 0;

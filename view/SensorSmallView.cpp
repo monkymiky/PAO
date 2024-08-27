@@ -38,6 +38,21 @@ SmallSensorView::~SmallSensorView(){
     sensor.removeObserver(this);
 };
 
+SmallSensorView::SmallSensorView(const SmallSensorView & SSV) :
+    QFrame(&SSV.mainWindow),
+    sensor(SSV.sensor) ,
+    mainWindow(SSV.mainWindow),
+    title(new QLabel(SSV.title)),
+    sensorType(new QLabel(SSV.sensorType)),
+    short_description(new QLabel(SSV.short_description))
+{
+    sensor.addObserver(this);
+    title->setParent(this);
+    sensorType->setParent(this);
+    short_description->setParent(this);
+}
+
+
 
 
 void SmallSensorView::update(AbstractSensor* sensor) {

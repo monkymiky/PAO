@@ -23,7 +23,6 @@
 namespace Sensor {
 namespace View {
   class SmallSensorView;
-  class MainWindow;
 
 class Aside: public QWidget {
     Q_OBJECT
@@ -39,7 +38,7 @@ class Aside: public QWidget {
     void addSSV(SmallSensorView* ssv);
 
   private slots:
-    void searchSSV();
+    void searchSSV() const;
 
   
 };

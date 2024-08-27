@@ -4,7 +4,7 @@
 
 namespace Sensor{
 
-double TemperaturePRTS::simulatePRTResistanceMeasurement(double temperature){
+double TemperaturePRTS::simulatePRTResistanceMeasurement(double temperature) const {
 // Calculate the PRT resistance at the specified temperature
   double R = R0 * (1 + alpha * temperature 
                     + beta * temperature * temperature 
@@ -21,7 +21,7 @@ void TemperaturePRTS::createInterpolationTable(){
     interpolationTable.push_back(resistance);
   }
 };
-double TemperaturePRTS::trasmute(double resistance) const  {
+double TemperaturePRTS::trasmuteYVal(double resistance) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -80,7 +80,7 @@ TemperaturePRTS::TemperaturePRTS(   const std::string name,
                                         createInterpolationTable();
                                     };
 
-void TemperaturePRTS::accept(VisitorInterface& visitor){
+void TemperaturePRTS::accept(ConstVisitorInterface& visitor) const{
     visitor.visitTemperaturePRTS(*this);
 };
 

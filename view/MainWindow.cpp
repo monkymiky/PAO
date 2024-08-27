@@ -36,7 +36,7 @@ MainWindow::MainWindow( SensorManager& manager,Aside& aside , SensorView& sensor
     connect(buttonClose, SIGNAL(clicked()), this, SLOT(closeSensors()));
     connect(buttonSimulate, SIGNAL(clicked()), this, SLOT(simulate()));
     connect(buttonModify, SIGNAL(clicked()), this, SLOT(modify()));
-    connect(buttonDelete, SIGNAL(clicked()), this, SLOT(deleteSensor()));
+    connect(buttonDelete, SIGNAL(clicked()), this, SLOT(buttonDeleteClicked()));
 
     QFrame* middleFrame = new QFrame(this);
     
@@ -58,11 +58,6 @@ MainWindow::MainWindow( SensorManager& manager,Aside& aside , SensorView& sensor
     show();
 };
 
-MainWindow::~MainWindow() {
-    delete &aside;
-    delete &sensorView;
-    delete &manager;
-};
 
 void MainWindow::changeCurrentSensor(AbstractSensor* sensor){
     sensorView.changeSensor(sensor);
@@ -76,29 +71,36 @@ void MainWindow::addSensor(AbstractSensor* sensor){
 }
 
 
-void MainWindow::buttonAddClicked(){
+void MainWindow::buttonAddClicked() {
     SensorDialog* typeDialog = new SensorDialog(*this);
     typeDialog->exec();
-};
-
-void MainWindow::deleteSensor(){
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(
-        this, 
-        "Elimina Sensore", 
-        "Tutte le modifiche non salvate andranno perse. Sei sicuro di voler eliminare il sensore?",
-        QMessageBox::Yes | QMessageBox::No
-        );
-    if (reply == QMessageBox::No) {
-        return; 
-    }
+}
+void MainWindow::deleteCurrentSensor() {
     manager.removeSensor(currentSensor);
     aside.deleteSSV(currentSensor);
     sensorView.changeSensor(nullptr);
     changeCurrentSensor(nullptr);
 };
+void MainWindow::buttonDeleteClicked() {
+    if(currentSensor==nullptr) return;
+    QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(
+            this, 
+            "Elimina Sensore", 
+            "Tutte le modifiche non salvate andranno perse. Sei sicuro di voler eliminare il sensore?",
+            QMessageBox::Yes | QMessageBox::No
+            );
+        if (reply == QMessageBox::No) {
+            return; 
+        }
+        deleteCurrentSensor();
+};
+void MainWindow::deleteSensor(AbstractSensor * sensor){
+    if(sensor == currentSensor) deleteCurrentSensor();
+    else manager.removeSensor(sensor);
+}
 
-void MainWindow::saveSensors(){
+void MainWindow::saveSensors() {
     QString filename = QFileDialog::getSaveFileName(
         this, "Save sensors", QDir::homePath(), "Json files (*.json)");
     if(filename.isEmpty()){
@@ -107,7 +109,7 @@ void MainWindow::saveSensors(){
     Sensor::JsonPharser::savetoJson(manager, filename);
 };
 
-void MainWindow::openSensorFile(){
+void MainWindow::openSensorFile() {
     QString filename = QFileDialog::getOpenFileName(
         this, "Open sensors", QDir::homePath(), "Json files (*.json)");
     if(filename.isEmpty()){
@@ -116,14 +118,13 @@ void MainWindow::openSensorFile(){
     Sensor::JsonPharser::openfromJson(manager, aside, this, filename);
 };
 
-void MainWindow::closeSensors(){
+void MainWindow::closeSensors() {
 
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(
         this, 
         "Chiudi Sensori", 
-        "Tutte le modifiche non salvate andranno perse, compresi tutti i sensori aggiunti 
-        dopo l'ultimo salvataggio.  Sei sicuro di voler chiudere il file ?",
+        "Tutte le modifiche non salvate andranno perse, compresi tutti i sensori aggiunti dopo l'ultimo salvataggio.  Sei sicuro di voler chiudere il file ?",
         QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::No) {
         return; 
@@ -134,7 +135,7 @@ void MainWindow::closeSensors(){
     sensorView.changeSensor(nullptr);
 };
 
-void MainWindow::simulate(){
+void MainWindow::simulate() const{
     if(currentSensor == nullptr){
         return;
     }

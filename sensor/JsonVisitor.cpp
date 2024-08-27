@@ -6,13 +6,13 @@
 
 namespace Sensor {
 
-    const QJsonObject& JsonVisitor::getObject() const {
-        return object;
+    const QJsonObject& JsonVisitor::getsensorsRappresentation() const {
+        return sensorsRappresentation;
     }
 
     void JsonVisitor::visitTemperaturePRTS(const TemperaturePRTS& sensor) {
         QJsonObject obj;
-        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getName()));
+        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));
         obj["xAxisLabel"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getXAxisLabel()));
@@ -38,13 +38,13 @@ namespace Sensor {
         data.append(pointArray);
         }
         obj["measure"] = data;
-        object = obj;
+        sensorsRappresentation = obj;
     }
 
     void JsonVisitor::visitHumidityNTCS(const HumidityNTCS& sensor) {
         QJsonObject obj;
         
-        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getName()));
+        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));
         obj["xAxisLabel"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getXAxisLabel()));
@@ -66,13 +66,13 @@ namespace Sensor {
 
         obj["measure"] = data;
         
-        object = obj;
+        sensorsRappresentation = obj;
     }
 
     void JsonVisitor::visitDust25S(const Dust25S& sensor) {
         QJsonObject obj;
         
-        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getName()));
+        obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));
         obj["xAxisLabel"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getXAxisLabel()));
@@ -96,7 +96,7 @@ namespace Sensor {
         
         obj["measure"] = data;
 
-        object = obj;
+        sensorsRappresentation = obj;
     }
 
 }

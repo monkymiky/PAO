@@ -62,7 +62,7 @@ void Aside::addSSV(SmallSensorView* ssv) {
 };
 
 
-void Aside::searchSSV(){
+void Aside::searchSSV() const {
     std::string searched = search->text().toStdString();
     searched = searched.substr(0, searched.find_last_not_of(" ") + 1);
     searched = searched.substr(searched.find_first_not_of(" "));
@@ -72,7 +72,7 @@ void Aside::searchSSV(){
         }
     }else{
         for(auto& ssv : smallSViewList){
-            std::string title = ssv->getSensor()->getName();
+            std::string title = ssv->getSensor()->getTitle();
             if(title.find(searched) != std::string::npos){
                 ssv->show();
             }else{

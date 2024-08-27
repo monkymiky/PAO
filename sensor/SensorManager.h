@@ -12,11 +12,13 @@ private:
 
 public:
     ~SensorManager();
-
+    SensorManager() = default;
+    SensorManager(const SensorManager&) = delete;
+    SensorManager& operator= (const SensorManager&) = delete;
     void addSensor(AbstractSensor* sensor);
     void removeSensor(AbstractSensor* sensor);
     void cleanSensors();
-    void addSensors(const std::vector<AbstractSensor*>& sensors);
+    void addSensors( std::vector<AbstractSensor*>& sensors);
     const std::vector<AbstractSensor*>& getSensors() const;
 };
 }

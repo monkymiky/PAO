@@ -1,5 +1,7 @@
 #include "JsonPharser.h"
 #include "../view/SensorSmallView.h"
+#include <QtWidgets/QMessageBox>
+
 
 namespace Sensor{
     void JsonPharser::savetoJson(const SensorManager& manager, const QString& filename){
@@ -7,7 +9,7 @@ namespace Sensor{
             for(auto sensor : manager.getSensors()){
                 JsonVisitor visitor;
                 sensor->accept(visitor);
-                sensors.append(visitor.getObject());
+                sensors.append(visitor.getsensorsRappresentation());
             }
             QJsonObject obj;
             obj["sensors"] = sensors;
@@ -20,7 +22,7 @@ namespace Sensor{
 
 
    void JsonPharser::openfromJson(
-    SensorManager& manager,View::Aside& aside, View::MainWindow* mainWindow, const QString& filename){
+    SensorManager& manager,View::Aside& aside,  View::MainWindow* mainWindow, const QString& filename){
         QFile file(filename);
             file.open(QIODevice::ReadOnly);
             QJsonDocument doc(QJsonDocument::fromJson(file.readAll()));
@@ -88,7 +90,13 @@ namespace Sensor{
                     measure.push_back({point[0].toDouble(), point[1].toDouble()});
                 }
                 for(auto point : measure){
-                    sens->addPoint(point);
+                    try{
+                        sens->addPoint(point);
+                    }catch(Sensor::DuplicatedXValueException){
+                        QMessageBox::warning(mainWindow, "Errore:", "Sono stati rilevati valori duplicati sull asse X, essi non sono ammessi. Un sensore non verrà aperto.");
+                        manager.removeSensor(sens);
+                        return;
+                    }
                 }
             }
     }

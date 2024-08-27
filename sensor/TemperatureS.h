@@ -16,12 +16,13 @@ class TemperaturePRTS : public AbstractSensor{
     double zeta;
     std::vector<double> interpolationTable;
     void createInterpolationTable();
-    double simulatePRTResistanceMeasurement(double);
+    double simulatePRTResistanceMeasurement(double) const ;
     protected:
-    double trasmute(double) const override;
+    double trasmuteYVal(double) const override;
 
     public:
     TemperaturePRTS();
+    ~TemperaturePRTS() = default;
     TemperaturePRTS(    const std::string name, 
                         const  std::string shortDesc,
                         const  std::string longDesc,
@@ -38,7 +39,7 @@ class TemperaturePRTS : public AbstractSensor{
                         const double epsilon,
                         const double zeta);
 
-    void accept(VisitorInterface& visitor) override;
+    void accept(ConstVisitorInterface& visitor) const override;
 
     double getR0() const;
     double getAlpha() const;

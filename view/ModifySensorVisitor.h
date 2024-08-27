@@ -1,7 +1,7 @@
 #ifndef MODIFY_SENSOR_VISITOR_H
 #define MODIFY_SENSOR_VISITOR_H
 
-#include "../sensor/visitorInterface.h"
+#include "../sensor/ConstVisitorInterface.h"
 #include "../sensor/TemperatureS.h"
 #include "../sensor/HumidityS.h" 
 #include "../sensor/Dust25S.h"
@@ -16,7 +16,7 @@
 namespace Sensor {
 namespace View{
 
-class ModifySensorVisitor : public VisitorInterface {
+class ModifySensorVisitor : public ConstVisitorInterface {
 private:
     QWidget* parent;
     QFrame* typeFrame;
@@ -25,10 +25,10 @@ private:
     std::unordered_map<std::string, QLineEdit*> sensorSpecificField;
     QString * yAxisLabel;
 
-    void addDataField(QString label, QString label2, QFrame* parentFrame, QVBoxLayout* layout);
+    void addDataField(const QString& label, const QString& label2,  QFrame* parentFrame, QVBoxLayout* layout);
 
 public:
-    ModifySensorVisitor(QWidget* parent);ù
+    ModifySensorVisitor(QWidget* parent);
 
     QFrame* gettypeFrame() const ;
     QFrame* getsensorSpec() const ;

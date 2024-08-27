@@ -3,26 +3,25 @@
 #include <math.h>
 namespace Sensor{
 
-double Dust25S::trasmute(double rawMeasure) const  {
+double Dust25S::trasmuteYVal(double rawMeasure) const  {
     double concentrationPM25 = a * rawMeasure + b;
     return concentrationPM25;
 };
-Dust25S::~Dust25S(){};
 Dust25S::Dust25S(): AbstractSensor("", "Resistore a impasto di carbone", "", "", "", "PM 2.5 [µg/m³]" ,0, 0, 0, 0 ) ,a(0), b(0){};
-Dust25S::Dust25S(   const std::string name, 
-                const  std::string shortDesc,
-                const  std::string longDesc,
-                const  std::string xAxisLabel,
-                const  unsigned int simulationSpan,
-                const  double sensibility,
-                const  double maxMeasurable,
-                const  double minMeasurable,
-                const double a,
-                const double b) 
+Dust25S::Dust25S(   const  std::string name, 
+                    const  std::string shortDesc,
+                    const  std::string longDesc,
+                    const  std::string xAxisLabel,
+                    const  unsigned int simulationSpan,
+                    const  double sensibility,
+                    const  double maxMeasurable,
+                    const  double minMeasurable,
+                    const double a,
+                    const double b) 
                 : AbstractSensor(name, "Resistore a impasto di carbone", shortDesc, longDesc, xAxisLabel, "PM 2.5 [µg/m³]" ,simulationSpan, sensibility, maxMeasurable, minMeasurable ),
                 a(a), b(b){};
 
-void Dust25S::accept(VisitorInterface& visitor){
+void Dust25S::accept(ConstVisitorInterface& visitor) const{
     visitor.visitDust25S(*this);
 };
 

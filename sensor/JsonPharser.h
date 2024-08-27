@@ -20,7 +20,7 @@ namespace Sensor{
     public:
         static void savetoJson(const SensorManager& manager, const QString& filename);
 
-        static void openfromJson(SensorManager& manager, View::Aside& aside,View::MainWindow* mainWindow, const QString& filename);
+        static void openfromJson(SensorManager& manager, View::Aside& aside,  View::MainWindow* mainWindow, const QString& filename);
     };
 
 }

@@ -4,15 +4,15 @@ namespace Sensor {
     namespace View {
 
         void ModifySensorVisitor::addDataField(
-            QString label, QString label2, QFrame* parentFrame, QVBoxLayout* layout
+            const QString& label, const QString& label2, QFrame* parentFrame,  QVBoxLayout* layout
             ){
-            QFrame* Frame = new QFrame(parentFrame);
-            QHBoxLayout *frameLayout = new QHBoxLayout(Frame);
-            QLabel *Lab = new QLabel(label,Frame);
+            QFrame* frame = new QFrame(parentFrame);
+            QHBoxLayout *frameLayout = new QHBoxLayout(frame);
+            QLabel *Lab = new QLabel(label,frame);
             frameLayout->addWidget(Lab);
-            QLineEdit* lineEdit2 = new QLineEdit(label2, Frame);
+            QLineEdit* lineEdit2 = new QLineEdit(label2, frame);
             frameLayout->addWidget(lineEdit2);
-            layout->addWidget(Frame);
+            layout->addWidget(frame);
             sensorSpecificField[label.toStdString()] = lineEdit2;
         }
 

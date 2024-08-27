@@ -1,15 +1,20 @@
 #ifndef ABSTRACTSENSOR_H
 #define ABSTRACTSENSOR_H
 
-#include <vld.h>
+
 #include <string>
 #include <vector>
 #include <array>
 #include "ObserverInterface.h"
-#include "VisitorInterface.h"
+#include "ConstVisitorInterface.h"
 
 
 namespace Sensor{
+
+class DuplicatedXValueException : public std::exception {
+public:
+    explicit DuplicatedXValueException()= default;
+};
 
 class AbstractSensor {
 
@@ -32,7 +37,7 @@ class AbstractSensor {
     std::vector<std::array<double, 2>> measure; // measure[i][0] == misura;  measure[i][1] == tempo  ------------------- accesso sbagliato ma ilò senso è quello 
     std::vector<ObserverInterface*> observers;
     protected:
-    static double trasmute(double rawMeasure) const = 0;
+    virtual double trasmuteYVal(double rawMeasure) const = 0;
 
     public:
 
@@ -48,18 +53,17 @@ class AbstractSensor {
                         const  double maxMeasurable,
                         const  double minMeasurable);
     AbstractSensor();
-    void addPoint(std::array<double, 2>&);
+    void addPoint(const std::array<double, 2>&);
     void deletePointAt(int);
     void clearPoints();
-    void addRawPoint(std::array<double, 2>&);
-    void addPoints(std::vector<std::array<double, 2>>&);
+    void addRawPoint(const std::array<double, 2>&);
+    void addPoints(const std::vector<std::array<double, 2>>&);
     virtual void simulate(); 
-    virtual void accept(VisitorInterface& visitor) = 0;
+    virtual void accept(ConstVisitorInterface& visitor) const = 0;
     void addObserver(ObserverInterface* observer);
     void removeObserver(ObserverInterface* observer);
-    void notifyAllObservers(AbstractSensor* sensor) ;
+    void notifyAllObservers(AbstractSensor* sensor) const ;
     // getter 
-    const std::vector<ObserverInterface*>& getObservers() const;
     const std::string& getTitle() const;
     const std::string& getSensorType() const;
     const std::string& getShortDescription() const;
