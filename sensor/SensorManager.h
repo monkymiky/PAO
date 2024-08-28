@@ -14,9 +14,9 @@ public:
     ~SensorManager();
     SensorManager() = default;
     SensorManager(const SensorManager&) = delete;
+    SensorManager& operator= (const SensorManager&) = delete;
     void addObserver(ObserverInterface* observer);
     void removeObserver(ObserverInterface* observer);
-    SensorManager& operator= (const SensorManager&) = delete;
     void addSensor(AbstractSensor* sensor);
     void removeSensor(AbstractSensor* sensor);
     void cleanSensors();
