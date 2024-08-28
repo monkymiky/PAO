@@ -32,6 +32,7 @@ void SensorManager::addSensor(AbstractSensor* sensor) {
     if (sensor != nullptr) {
         sensors.push_back(sensor);
     }
+    notifyAllObservers(sensor);
 }
 
 void SensorManager::removeSensor(AbstractSensor* sensor) {

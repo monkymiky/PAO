@@ -11,6 +11,7 @@ namespace Sensor
     
 MainWindow::MainWindow( SensorManager& manager,Aside& aside , SensorView& sensorView, QWidget *parent  )
 : QMainWindow(parent),  manager(manager) ,aside(aside) ,sensorView(sensorView){
+    manager.addObserver(this);
     QWidget* centralWidget = new QWidget(this);
     QVBoxLayout* mainWindowLayout = new QVBoxLayout(centralWidget);
 
@@ -64,15 +65,8 @@ void MainWindow::changeCurrentSensor(AbstractSensor* sensor){
     currentSensor = sensor;
 };
 
-void MainWindow::addSensor(AbstractSensor* sensor){
-    manager.addSensor(sensor);
-    aside.addSSV(new SmallSensorView(*sensor, *this));
-    changeCurrentSensor(sensor);
-}
-
-
 void MainWindow::buttonAddClicked() {
-    SensorDialog* typeDialog = new SensorDialog(*this);
+    SensorDialog* typeDialog = new SensorDialog(manager,this);
     typeDialog->exec();
 }
 void MainWindow::deleteCurrentSensor() {
@@ -80,6 +74,10 @@ void MainWindow::deleteCurrentSensor() {
     aside.deleteSSV(currentSensor);
     sensorView.changeSensor(nullptr);
     changeCurrentSensor(nullptr);
+}
+void MainWindow::update(AbstractSensor *sensor) {
+    aside.addSSV(new SmallSensorView(*sensor, *this));
+    changeCurrentSensor(sensor);
 };
 void MainWindow::buttonDeleteClicked() {
     if(currentSensor==nullptr) return;
@@ -95,10 +93,6 @@ void MainWindow::buttonDeleteClicked() {
         }
         deleteCurrentSensor();
 };
-void MainWindow::deleteSensor(AbstractSensor * sensor){
-    if(sensor == currentSensor) deleteCurrentSensor();
-    else manager.removeSensor(sensor);
-}
 
 void MainWindow::saveSensors() {
     QString filename = QFileDialog::getSaveFileName(
@@ -115,7 +109,7 @@ void MainWindow::openSensorFile() {
     if(filename.isEmpty()){
         return;
     }
-    Sensor::JsonPharser::openfromJson(manager, aside, this, filename);
+    Sensor::JsonPharser::openfromJson(manager, filename);
 };
 
 void MainWindow::closeSensors() {
@@ -145,7 +139,7 @@ void MainWindow::modify() {
     if(currentSensor == nullptr){
         return;
     }
-    SensorDialog* typeDialog = new SensorDialog( *this ,currentSensor);
+    SensorDialog* typeDialog = new SensorDialog( manager,this ,currentSensor);
     typeDialog->exec();
 };
 } 

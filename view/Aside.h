@@ -24,7 +24,7 @@ namespace Sensor {
 namespace View {
   class SmallSensorView;
 
-class Aside: public QWidget , public ObserverInterface{
+class Aside: public QWidget {
     Q_OBJECT
   private:
     std::list<SmallSensorView*> smallSViewList;

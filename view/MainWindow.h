@@ -12,7 +12,7 @@ namespace Sensor{
 namespace View{
 class Aside;
     
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, public ObserverInterface {
     Q_OBJECT
     private:
     SensorManager& manager;
@@ -24,9 +24,8 @@ class MainWindow : public QMainWindow {
                 Aside& aside , 
                 SensorView& sensorView,
                 QWidget *parent = nullptr );
-    void addSensor(AbstractSensor* sensor);
-    void deleteSensor(AbstractSensor * sensor);
     void deleteCurrentSensor();
+    void update(AbstractSensor* sensor) override;
  
     private slots:
     void changeCurrentSensor(AbstractSensor* sensor);

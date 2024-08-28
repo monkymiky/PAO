@@ -3,7 +3,6 @@
 
 
 #include "../sensor/SensorManager.h"
-#include "../view/Aside.h"
 #include "JsonVisitor.h"
 #include "QJsonDocument"
 #include "QJsonObject"
@@ -20,7 +19,7 @@ namespace Sensor{
     public:
         static void savetoJson(const SensorManager& manager, const QString& filename);
 
-        static void openfromJson(SensorManager& manager, View::Aside& aside,  View::MainWindow* mainWindow, const QString& filename);
+        static void openfromJson(SensorManager& manager, const QString& filename);
     };
 
 }

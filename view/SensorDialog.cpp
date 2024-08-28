@@ -26,10 +26,10 @@ void SensorDialog::addFrame(const QString& label, QWidget & widget, QLayout& lay
     layout.addWidget(Frame);
 };
 
-SensorDialog::SensorDialog(MainWindow& mainWindow, AbstractSensor *sensor)
+SensorDialog::SensorDialog(SensorManager& manager, QWidget* parent, AbstractSensor *sensor )
     :
-    QDialog(&mainWindow),
-    mainWindow(mainWindow),
+    QDialog(parent),
+    manager(manager),
     sensor(sensor),
     titleLE(QLineEdit(this)),
     shortDescLE(QLineEdit(this)),
@@ -322,7 +322,7 @@ void SensorDialog::saveSensor(){
         }else {
             std::cerr << "Unexpected sensor type selected in SensorDialog::save()";
         }
-        mainWindow.addSensor(sensor);
+        
     }else{
         sensorIsNew = false;
         sensor->setTitle(title);
@@ -388,16 +388,16 @@ void SensorDialog::saveSensor(){
                     sensor->addPoint(p);
                 }catch(Sensor::DuplicatedXValueException){
                     if(sensorIsNew){
-                        mainWindow.deleteSensor(sensor);
+                        delete sensor;
                         sensor=nullptr;
                     } 
                     else sensor->clearPoints();
                     QMessageBox::warning(this, "Errore:", "Non sono ammessi valori sull asse X duplicati. Modifica tutti i duplicati e riprova.");
                     return;
                 }
-               
             }
         }
+    if(sensorIsNew) manager.addSensor(sensor);
     close();
 };
 
