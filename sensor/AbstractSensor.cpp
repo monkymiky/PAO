@@ -37,13 +37,13 @@ void AbstractSensor::addPoint(const std::array<double,2>& newPoint){
             }else if(it->at(1) == newPoint[1]) throw DuplicatedXValueException();
         }
     }
-    if (measure.size() > 1){
+    if (measure.size() >= 1){
         if(max < newPoint[0]) max = newPoint[0];
         else if (min > newPoint[0]) min = newPoint[0];
         if(lastXVal < newPoint[1]) lastXVal = newPoint[1];
         double diff = (newPoint[0] - average);
-        variance = ((variance * (measure.size() - 1) + diff * diff)/measure.size() + (diff * average) / measure.size());
         average = (average * (measure.size()-1) + newPoint[0] )/ measure.size();
+        variance = ((variance * (measure.size()-1) + diff * diff)/measure.size());
     }else{
         max = newPoint[0];
         min = newPoint[0];
@@ -65,11 +65,7 @@ void AbstractSensor::clearPoints(){
     variance = 0;
     lastXVal = 0;
 }
-void AbstractSensor::addRawPoint(const std::array<double,2>& rawPoint){
-    std::array<double,2> point = {trasmuteYVal(rawPoint[0]), rawPoint[1]};
-    addPoint(point);
-    notifyAllObservers(this);
-}
+
 void AbstractSensor::addPoints(const std::vector<std::array<double, 2>>& points){
     measure.insert(measure.end(), std::move(points.begin()), std::move(points.end()));
     double sum = 0;

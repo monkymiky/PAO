@@ -2,7 +2,7 @@
 #include "SensorDialog.h"
 #include <iostream>
 #include <QFileDialog>
-#include "../sensor/JsonPharser.h"
+#include "JsonPharser.h"
 #include <QMessageBox>
 
 namespace Sensor

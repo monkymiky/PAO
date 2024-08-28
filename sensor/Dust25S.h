@@ -9,14 +9,11 @@ class Dust25S : public AbstractSensor{
     private:
     double a;
     double b;
-
-    protected:
-    double trasmuteYVal(double rawMeasure) const override;
-
+    
     public:
     ~Dust25S() = default;
     Dust25S();
-    Dust25S(  const std::string name, 
+    Dust25S(  const std::string title, 
             const  std::string shortDesc,
             const  std::string longDesc,
             const  std::string xAxisLabel,
@@ -26,7 +23,7 @@ class Dust25S : public AbstractSensor{
             const  double minMeasurable,
             const double a,
             const double b);
-
+    double trasmuteRawVal(double rawMeasure) const override;
     void accept(ConstVisitorInterface& visitor) const override;
     double getA() const;
     double getB() const;

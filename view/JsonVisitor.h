@@ -2,7 +2,7 @@
 #define JSON_VISITOR_H
 
 
-#include "ConstVisitorInterface.h"
+#include "../sensor/ConstVisitorInterface.h"
 #include <QJsonObject>
 #include "../sensor/TemperatureS.h"
 #include "../sensor/HumidityS.h"

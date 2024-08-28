@@ -21,7 +21,7 @@ void TemperaturePRTS::createInterpolationTable(){
     interpolationTable.push_back(resistance);
   }
 };
-double TemperaturePRTS::trasmuteYVal(double resistance) const  {
+double TemperaturePRTS::trasmuteRawVal(double resistance) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -57,7 +57,7 @@ TemperaturePRTS::TemperaturePRTS():
     AbstractSensor("", "Resistenza PRT", "", "", "","Temperatura [C°]", 0, 0, 0, 0 ),
                     R0(0), alpha(0), beta(0), gamma(0), delta(0), epsilon(0), zeta(0){};
 
-TemperaturePRTS::TemperaturePRTS(   const std::string name, 
+TemperaturePRTS::TemperaturePRTS(   const std::string title, 
                                     const  std::string shortDesc,
                                     const  std::string longDesc,
                                     const  std::string xAxisLabel,
@@ -73,7 +73,7 @@ TemperaturePRTS::TemperaturePRTS(   const std::string name,
                                     const double epsilon = -1.76e-13,
                                     const double zeta =  2.04e-16) 
                                     : AbstractSensor(
-                                        name, "Resistenza PRT", shortDesc, longDesc, xAxisLabel,"Temperatura [C°]",
+                                        title, "Resistenza PRT", shortDesc, longDesc, xAxisLabel,"Temperatura [C°]",
                                         simulationSpan, sensibility, maxMeasurable, minMeasurable ),
                                     R0(R0), alpha(alpha), beta(beta), gamma(gamma), delta(delta), epsilon(epsilon), zeta(zeta)
                                     {

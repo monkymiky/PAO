@@ -19,8 +19,8 @@ HEADERS += sensor/AbstractSensor.h \
            sensor/ConstVisitorInterface.h \
            sensor/Dust25S.h \
            sensor/HumidityS.h \
-           sensor/JsonPharser.h \
-           sensor/JsonVisitor.h \
+           view/JsonPharser.h \
+           view/JsonVisitor.h \
            sensor/ObserverInterface.h \
            sensor/SensorManager.h \
            sensor/TemperatureS.h \
@@ -35,8 +35,8 @@ SOURCES += main.cpp \
            sensor/AbstractSensor.cpp \
            sensor/Dust25S.cpp \
            sensor/HumidityS.cpp \
-           sensor/JsonPharser.cpp \
-           sensor/JsonVisitor.cpp \
+           view/JsonPharser.cpp \
+           view/JsonVisitor.cpp \
            sensor/SensorManager.cpp \
            sensor/TemperatureS.cpp \
            view/Aside.cpp \

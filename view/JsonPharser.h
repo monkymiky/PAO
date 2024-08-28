@@ -2,16 +2,16 @@
 #define JSONPHARSER_H
 
 
-#include "SensorManager.h"
+#include "../sensor/SensorManager.h"
 #include "../view/Aside.h"
 #include "JsonVisitor.h"
 #include "QJsonDocument"
 #include "QJsonObject"
 #include "QJsonArray"
 #include "QFile"
-#include "TemperatureS.h"
-#include "HumidityS.h"
-#include "Dust25S.h"
+#include "../sensor/TemperatureS.h"
+#include "../sensor/HumidityS.h"
+#include "../sensor/Dust25S.h"
 #include <iostream>
 
 namespace Sensor{

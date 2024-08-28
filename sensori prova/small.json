@@ -1,0 +1,183 @@
+{
+    "sensors": [
+        {
+            "R0": "500",
+            "alpha": "0.05",
+            "beta": "3435",
+            "delta": "1",
+            "epsilon": "7e-08",
+            "gamma": "1",
+            "longDesc": "Temperatura campionata giornalmente alle ore 15 della città di Bolzano. la posizione esatta del sensore è : 46.501870, 11.339721 . Attivo dal 3 agosto 2024.",
+            "maxMeasurable": "100",
+            "measure": [
+                [
+                    32,
+                    1
+                ],
+                [
+                    35,
+                    2
+                ],
+                [
+                    30,
+                    3
+                ],
+                [
+                    27,
+                    4
+                ],
+                [
+                    26,
+                    5
+                ],
+                [
+                    32,
+                    6
+                ],
+                [
+                    36,
+                    7
+                ],
+                [
+                    39,
+                    8
+                ],
+                [
+                    40,
+                    9
+                ],
+                [
+                    40,
+                    10
+                ]
+            ],
+            "minMeasurable": "-30",
+            "name": "Bolzano Piazza Mazzini",
+            "sensibility": "1",
+            "shortDesc": "Tempreatura C° dal 3/08/24 h:15",
+            "simulationSpan": "1",
+            "type": "TemperaturePRTS",
+            "xAxisLabel": "Giorni a partire  dal 03/09/24",
+            "zeta": "1"
+        },
+        {
+            "AHumid": "-0.01",
+            "BHumid": "100",
+            "CHumid": "0.0001",
+            "longDesc": "Dati 3Bmeteo riguardanti l'umidità relativa a Padova registrate dal sensore presente alle coordinate 45.41N 11.89E  a partire dal 10 agosto 2024",
+            "maxMeasurable": "100",
+            "measure": [
+                [
+                    55,
+                    1
+                ],
+                [
+                    56,
+                    2
+                ],
+                [
+                    51,
+                    3
+                ],
+                [
+                    49,
+                    4
+                ],
+                [
+                    59,
+                    5
+                ],
+                [
+                    64,
+                    6
+                ],
+                [
+                    50,
+                    7
+                ],
+                [
+                    53,
+                    8
+                ],
+                [
+                    47,
+                    9
+                ],
+                [
+                    57,
+                    10
+                ]
+            ],
+            "minMeasurable": "0",
+            "name": "Umidità Padova dal 10/09/24",
+            "sensibility": "1",
+            "shortDesc": "Dati 3Bmeteo",
+            "simulationSpan": "1",
+            "type": "HumidityNTCS",
+            "xAxisLabel": "Giorni dal 10/09/24"
+        },
+        {
+            "ADust": "10",
+            "BDust": "3",
+            "longDesc": "dati provenienti da : https://www.pgt.comune.milano.it/vasraall2-quadro-di-riferimento-territoriale-e-ambientale/3-analisi-del-sistema-paesistico-ambientale/32-contesto-geologico-e-idrogeologico/33-qualita-dellaria/331-andamento-delle-concentrazioni-degli-inquinanti-atmosfera",
+            "maxMeasurable": "50",
+            "measure": [
+                [
+                    34,
+                    2006
+                ],
+                [
+                    31,
+                    2007
+                ],
+                [
+                    30,
+                    2008
+                ],
+                [
+                    25,
+                    2009
+                ],
+                [
+                    33,
+                    2010
+                ],
+                [
+                    30,
+                    2011
+                ],
+                [
+                    30,
+                    2012
+                ],
+                [
+                    26,
+                    2013
+                ],
+                [
+                    30,
+                    2017
+                ],
+                [
+                    27,
+                    2018
+                ],
+                [
+                    28,
+                    2019
+                ],
+                [
+                    30,
+                    2020
+                ]
+            ],
+            "minMeasurable": "0",
+            "name": "Polveri PM 2,5 Milano",
+            "sensibility": "1",
+            "shortDesc": "Misurazioni annue dal 2006",
+            "simulationSpan": "1",
+            "type": "Dust25S",
+            "xAxisLabel": "Anno"
+        }
+    ]
+}

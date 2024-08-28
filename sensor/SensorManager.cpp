@@ -5,6 +5,28 @@ namespace Sensor{
 SensorManager::~SensorManager() {
     cleanSensors();
 }
+void SensorManager::addObserver(ObserverInterface* observer) {
+    observers.push_back(observer);
+}
+
+void SensorManager::removeObserver(ObserverInterface* observer){
+    int size  = observers.size();
+    int i = 0;
+    while (i < size) {
+        if(observers[i] == observer){
+            observers.erase(observers.begin() + i);
+            size--;
+            i--;
+        }
+        i++;
+    }
+};
+
+void SensorManager::notifyAllObservers(AbstractSensor* sensor) const {
+    if(observers.size() != 0){
+        for(auto observer : observers) observer->update(sensor);
+    }
+};
 
 void SensorManager::addSensor(AbstractSensor* sensor) {
     if (sensor != nullptr) {
@@ -24,10 +46,6 @@ void SensorManager::cleanSensors() {
         delete sensor;
     }
     sensors.clear();
-}
-
-void SensorManager::addSensors( std::vector<AbstractSensor*>& sensors) {
-    sensors.insert(sensors.end(), sensors.begin(), sensors.end());
 }
 
 const std::vector<AbstractSensor*>& SensorManager::getSensors() const {

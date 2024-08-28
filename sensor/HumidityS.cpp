@@ -13,7 +13,7 @@ void HumidityNTCS::createInterpolationTable(){
         interpolationTable.push_back(UR);
     } 
 };
-double HumidityNTCS::trasmuteYVal(double rawMeasure) const  {
+double HumidityNTCS::trasmuteRawVal(double rawMeasure) const  {
     int inf = 0;
     int sup = interpolationTable.size() - 1;
 
@@ -45,7 +45,7 @@ double HumidityNTCS::trasmuteYVal(double rawMeasure) const  {
     return interpolatedHumidity;
 };
 HumidityNTCS::HumidityNTCS(): AbstractSensor("", "Resistenza NTC", "", "", "","Umidità relativa %", 0, 0, 0, 0 ),a(0), b(0), c(0){};
-HumidityNTCS::HumidityNTCS( const std::string name, 
+HumidityNTCS::HumidityNTCS( const std::string title, 
                             const  std::string shortDesc,
                             const  std::string longDesc,
                             const  std::string xAxisLabel,
@@ -56,7 +56,7 @@ HumidityNTCS::HumidityNTCS( const std::string name,
                             const double a,
                             const double b,
                             const double c) 
-                            : AbstractSensor(name, "Resistenza NTC", shortDesc, longDesc, xAxisLabel,"Umidità relativa %", simulationSpan, sensibility, maxMeasurable, minMeasurable ),
+                            : AbstractSensor(title, "Resistenza NTC", shortDesc, longDesc, xAxisLabel,"Umidità relativa %", simulationSpan, sensibility, maxMeasurable, minMeasurable ),
                             a(a), b(b), c(c)
                             {
                                 createInterpolationTable();

@@ -31,7 +31,7 @@ namespace Sensor{
             for(auto sensor : sensors){
                 QJsonObject obj = sensor.toObject();
                 AbstractSensor* sens = nullptr;
-                if(obj.contains("R0")){
+                if(obj["type"].toString().toStdString() == "TemperaturePRTS"){
                     sens = new TemperaturePRTS(
                         obj["name"].toString().toStdString(), 
                         obj["shortDesc"].toString().toStdString(), 
@@ -50,7 +50,7 @@ namespace Sensor{
                         obj["zeta"].toString().toDouble()
                         );
                     manager.addSensor(sens);
-                }else if(obj.contains("AHumid")){
+                }else if(obj["type"].toString().toStdString() == "HumidityNTCS"){
                     sens = new HumidityNTCS(
                         obj["name"].toString().toStdString(),
                         obj["shortDesc"].toString().toStdString(),
@@ -65,7 +65,7 @@ namespace Sensor{
                         obj["CHumid"].toString().toDouble()
                         );
                     manager.addSensor(sens);
-                }else if(obj.contains("ADust")){
+                }else if(obj["type"].toString().toStdString() == "Dust25S"){
                     sens = new Dust25S(
                         obj["name"].toString().toStdString(), 
                         obj["shortDesc"].toString().toStdString(), 

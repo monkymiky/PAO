@@ -5,20 +5,21 @@
 #include "AbstractSensor.h"
 #include "ObserverInterface.h"
 namespace Sensor{
-class SensorManager {
+class SensorManager{
 private:
     std::vector<AbstractSensor*> sensors;
     std::vector<ObserverInterface*> observers;
-
+    void notifyAllObservers(AbstractSensor* sensor) const ;
 public:
     ~SensorManager();
     SensorManager() = default;
     SensorManager(const SensorManager&) = delete;
+    void addObserver(ObserverInterface* observer);
+    void removeObserver(ObserverInterface* observer);
     SensorManager& operator= (const SensorManager&) = delete;
     void addSensor(AbstractSensor* sensor);
     void removeSensor(AbstractSensor* sensor);
     void cleanSensors();
-    void addSensors( std::vector<AbstractSensor*>& sensors);
     const std::vector<AbstractSensor*>& getSensors() const;
 };
 }

@@ -12,13 +12,11 @@ class HumidityNTCS : public AbstractSensor{
     double c;
     std::vector<double> interpolationTable;
     void createInterpolationTable();
-    protected:
-    double trasmuteYVal(double rawMeasure) const override;
 
     public:
     ~HumidityNTCS() = default;
     HumidityNTCS();
-    HumidityNTCS(   const std::string name, // resistenza NTC
+    HumidityNTCS(   const std::string title, // resistenza NTC
                     const  std::string shortDesc,
                     const  std::string longDesc,
                     const  std::string xAxisLabel,
@@ -29,7 +27,7 @@ class HumidityNTCS : public AbstractSensor{
                     const double a,
                     const double b,
                     const double c);
-    
+    double trasmuteRawVal(double rawMeasure) const override;
     void accept(ConstVisitorInterface& visitor) const override;
 
     double getA() const;

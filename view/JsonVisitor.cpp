@@ -12,6 +12,7 @@ namespace Sensor {
 
     void JsonVisitor::visitTemperaturePRTS(const TemperaturePRTS& sensor) {
         QJsonObject obj;
+        obj["type"] = QJsonValue::fromVariant( QString("TemperaturePRTS"));
         obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));
@@ -43,7 +44,7 @@ namespace Sensor {
 
     void JsonVisitor::visitHumidityNTCS(const HumidityNTCS& sensor) {
         QJsonObject obj;
-        
+        obj["type"] = QJsonValue::fromVariant( QString("HumidityNTCS"));
         obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));
@@ -71,7 +72,7 @@ namespace Sensor {
 
     void JsonVisitor::visitDust25S(const Dust25S& sensor) {
         QJsonObject obj;
-        
+        obj["type"] = QJsonValue::fromVariant( QString("Dust25S"));
         obj["name"] = QJsonValue::fromVariant( QString::fromStdString(sensor.getTitle()));
         obj["shortDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getShortDescription()));
         obj["longDesc"] = QJsonValue::fromVariant(QString::fromStdString(sensor.getLongDescription()));

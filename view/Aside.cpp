@@ -2,7 +2,7 @@
 #include "SensorDialog.h"
 #include <iostream>
 #include <QFileDialog>
-#include "../sensor/JsonPharser.h"
+#include "JsonPharser.h"
 
 
 namespace Sensor {
@@ -36,8 +36,8 @@ namespace View {
 }
 
 void Aside::clearAllSSV() {
-    for(auto sensor : smallSViewList){
-        delete sensor;
+    for(auto sensorSSV : smallSViewList){
+        delete sensorSSV;
     }
     smallSViewList.clear();
 };

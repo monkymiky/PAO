@@ -35,12 +35,9 @@ class AbstractSensor {
     double variance;
     double lastXVal;
     std::vector<std::array<double, 2>> measure; // measure[i][0] == misura;  measure[i][1] == tempo  ------------------- accesso sbagliato ma ilò senso è quello 
-    std::vector<ObserverInterface*> observers;
-    protected:
-    virtual double trasmuteYVal(double rawMeasure) const = 0;
+    std::vector<ObserverInterface*> observers;    
 
     public:
-
     virtual ~AbstractSensor() = default;
     AbstractSensor(     const std::string title,
                         const  std::string sensorType,
@@ -56,8 +53,8 @@ class AbstractSensor {
     void addPoint(const std::array<double, 2>&);
     void deletePointAt(int);
     void clearPoints();
-    void addRawPoint(const std::array<double, 2>&);
     void addPoints(const std::vector<std::array<double, 2>>&);
+    virtual double trasmuteRawVal(double rawMeasure) const = 0;
     virtual void simulate(); 
     virtual void accept(ConstVisitorInterface& visitor) const = 0;
     void addObserver(ObserverInterface* observer);
